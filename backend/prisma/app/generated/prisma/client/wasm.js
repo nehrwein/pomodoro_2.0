@@ -115,10 +115,22 @@ Prisma.NullTypes = {
 
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
-  name: 'name',
+  username: 'username',
   email: 'email',
   password: 'password',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  workMinutes: 'workMinutes',
+  shortBreakMinutes: 'shortBreakMinutes',
+  longBreakMinutes: 'longBreakMinutes'
+};
+
+exports.Prisma.TaskScalarFieldEnum = {
+  id: 'id',
+  description: 'description',
+  completed: 'completed',
+  createdAt: 'createdAt',
+  completedAt: 'completedAt',
+  userId: 'userId'
 };
 
 exports.Prisma.SortOrder = {
@@ -133,7 +145,8 @@ exports.Prisma.QueryMode = {
 
 
 exports.Prisma.ModelName = {
-  User: 'User'
+  User: 'User',
+  Task: 'Task'
 };
 
 /**
