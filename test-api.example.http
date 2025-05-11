@@ -1,0 +1,67 @@
+### Benutzerregistrierung
+POST http://localhost:3000/auth/signup
+Content-Type: application/json
+
+{
+  "username": "<USERNAME>",
+  "email": "<EMAIL>",
+  "password": "<PASSWORD>"
+}
+
+### Benutzer-Login
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "<EMAIL>",
+  "password": "<PASSWORD>"
+}
+
+### Authentifizierte Anfrage
+GET http://localhost:3000/tasks/<userId>
+Authorization: Bearer <TOKEN>
+
+### Neue Aufgabe erstellen
+POST http://localhost:3000/tasks
+Content-Type: application/json
+Authorization: Bearer <TOKEN>
+
+{
+  "description": "<TASK_DESCRIPTION>",
+  "user": "<USER_ID>"
+}
+
+### Aufgabe abschließen
+PATCH http://localhost:3000/tasks/<taskId>/complete
+Content-Type: application/json
+Authorization: Bearer <TOKEN>
+
+{
+  "completed": true,
+  "completedAt": "<DATE_TIME>"
+}
+
+### Aufgabe aktualisieren
+PATCH http://localhost:3000/tasks/<taskId>/update
+Content-Type: application/json
+Authorization: Bearer <TOKEN>
+
+{
+  "description": "<UPDATED_TASK_DESCRIPTION>"
+}
+
+### Pomodoro hinzufügen
+POST http://localhost:3000/tasks/<userId>/pomodoro
+Content-Type: application/json
+Authorization: Bearer <TOKEN>
+
+{
+  "completedAt": "<DATE_TIME>"
+}
+
+### Aufgabe löschen
+DELETE http://localhost:3000/tasks/<taskId>
+Authorization: Bearer <TOKEN>
+
+### Get endpoints
+GET http://localhost:3000/endpoints
