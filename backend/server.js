@@ -13,7 +13,7 @@ app.get('/', (req, res) => {
   res.send('Welcome to the Pomodoro App Backend!');
 });
 
-//Todo add list
+//NOTE - This is currently not working for express 5 https://www.npmjs.com/package/express-list-endpoints
 // Get all endpoints
 app.get('/endpoints', (req, res) => {
   res.json({
