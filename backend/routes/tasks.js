@@ -5,24 +5,11 @@ const { authenticateUser } = require('./auth');
 const router = express.Router();
 const prisma = new PrismaClient();
 
-//Todo is this working???
-// Get all endpoints
-router.get('/endpoints', (req, res) => {
-  res.json({
-    response: 'List of endpoints will be dynamically generated here.',
-    success: true,
-  });
-});
-
 // Get all tasks and pomodoros of a user
-router.get('/tasks/:userId', authenticateUser, async (req, res) => {
+router.get('/:userId', authenticateUser, async (req, res) => {
   const { userId } = req.params;
 
-  console.log('Authentifizierter Benutzer (Token):', req.userId);
-  console.log('Angeforderte Benutzer-ID (URL):', userId);
-
   if (req.userId !== userId) {
-    console.log('Zugriff verweigert: Benutzer-ID aus Token und URL stimmen nicht überein.');
     return res.status(403).json({
       response: { message: 'Access denied' },
       success: false,
@@ -34,30 +21,34 @@ router.get('/tasks/:userId', authenticateUser, async (req, res) => {
       where: { userId },
       orderBy: { createdAt: 'desc' },
     });
-    console.log('Gefundene Aufgaben:', tasks);
     res.status(200).json({ response: tasks, success: true });
   } catch (error) {
-    console.error('Fehler beim Abrufen der Aufgaben:', error);
     res.status(400).json({ response: error, success: false });
   }
 });
 
 // Post a new task
-router.post('/tasks', authenticateUser, async (req, res) => {
+router.post('/', authenticateUser, async (req, res) => {
   const { description, user } = req.body;
+
+  // Validate request body
+  if (!description || !user) {
+    return res.status(400).json({ response: 'Description and user are required.', success: false });
+  }
 
   try {
     const newTask = await prisma.task.create({
-      data: { description, userId: user },
+      data: { description, userId: user, completed: false },
     });
     res.status(201).json({ response: newTask, success: true });
   } catch (error) {
-    res.status(400).json({ response: error, success: false });
+    console.error('Error creating task:', error);
+    res.status(400).json({ response: error.message, success: false });
   }
 });
 
 // Complete an existing task
-router.patch('/tasks/:taskId/complete', authenticateUser, async (req, res) => {
+router.patch('/:taskId/complete', authenticateUser, async (req, res) => {
   const { taskId } = req.params;
   const { completed, completedAt } = req.body;
 
@@ -73,7 +64,7 @@ router.patch('/tasks/:taskId/complete', authenticateUser, async (req, res) => {
 });
 
 // Update the description of an existing task
-router.patch('/tasks/:taskId/update', authenticateUser, async (req, res) => {
+router.patch('/:taskId/update', authenticateUser, async (req, res) => {
   const { taskId } = req.params;
   const { description } = req.body;
 
@@ -89,7 +80,7 @@ router.patch('/tasks/:taskId/update', authenticateUser, async (req, res) => {
 });
 
 // Add a pomodoro
-router.post('/tasks/:userId/pomodoro', authenticateUser, async (req, res) => {
+router.post('/:userId/pomodoro', authenticateUser, async (req, res) => {
   const { userId } = req.params;
   const { completedAt } = req.body;
 
@@ -104,7 +95,7 @@ router.post('/tasks/:userId/pomodoro', authenticateUser, async (req, res) => {
 });
 
 // Delete a single task
-router.delete('/tasks/:taskId', authenticateUser, async (req, res) => {
+router.delete('/:taskId', authenticateUser, async (req, res) => {
   const { taskId } = req.params;
 
   try {
