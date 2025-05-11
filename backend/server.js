@@ -1,5 +1,6 @@
 const express = require('express');
-const authRoutes = require('./routes/signUp');
+const authRoutes = require('./routes/auth');
+const taskRoutes = require('./routes/tasks');
 
 const app = express();
 const PORT = 3000;
@@ -7,11 +8,20 @@ const PORT = 3000;
 // Middleware
 app.use(express.json());
 
+// Logging-Middleware
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  console.log('Headers:', req.headers);
+  console.log('Body:', req.body);
+  next();
+});
+
 // Routes
 app.get('/', (req, res) => {
   res.send('Welcome to the Pomodoro App Backend!');
 });
-app.use('/signup', authRoutes);
+app.use('/auth', authRoutes.router);
+app.use(taskRoutes);
 
 
 // Start server
