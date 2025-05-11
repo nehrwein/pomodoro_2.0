@@ -133,6 +133,13 @@ exports.Prisma.TaskScalarFieldEnum = {
   userId: 'userId'
 };
 
+exports.Prisma.PomodoroScalarFieldEnum = {
+  id: 'id',
+  pomodoro: 'pomodoro',
+  completedAt: 'completedAt',
+  userId: 'userId'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -146,7 +153,8 @@ exports.Prisma.QueryMode = {
 
 exports.Prisma.ModelName = {
   User: 'User',
-  Task: 'Task'
+  Task: 'Task',
+  Pomodoro: 'Pomodoro'
 };
 
 /**

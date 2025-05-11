@@ -90,7 +90,7 @@ router.post('/:userId/pomodoro', authenticateUser, async (req, res) => {
     });
     res.status(201).json({ response: newPomodoro, success: true });
   } catch (error) {
-    res.status(400).json({ response: error, success: false });
+    res.status(400).json({ response: error.message, success: false });
   }
 });
 

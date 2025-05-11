@@ -1,6 +1,7 @@
 const express = require('express');
 const authRoutes = require('./routes/auth');
 const taskRoutes = require('./routes/tasks');
+const userRoutes = require('./routes/user');
 
 const app = express();
 const PORT = 3000;
@@ -24,7 +25,7 @@ app.get('/endpoints', (req, res) => {
 
 app.use('/auth', authRoutes.router);
 app.use('/tasks', taskRoutes);
-
+app.use('/users', userRoutes);
 
 // Start server
 app.listen(PORT, () => {

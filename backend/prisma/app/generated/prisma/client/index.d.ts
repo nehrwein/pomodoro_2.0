@@ -23,6 +23,11 @@ export type User = $Result.DefaultSelection<Prisma.$UserPayload>
  * 
  */
 export type Task = $Result.DefaultSelection<Prisma.$TaskPayload>
+/**
+ * Model Pomodoro
+ * 
+ */
+export type Pomodoro = $Result.DefaultSelection<Prisma.$PomodoroPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -135,6 +140,16 @@ export class PrismaClient<
     * ```
     */
   get task(): Prisma.TaskDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.pomodoro`: Exposes CRUD operations for the **Pomodoro** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Pomodoros
+    * const pomodoros = await prisma.pomodoro.findMany()
+    * ```
+    */
+  get pomodoro(): Prisma.PomodoroDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -576,7 +591,8 @@ export namespace Prisma {
 
   export const ModelName: {
     User: 'User',
-    Task: 'Task'
+    Task: 'Task',
+    Pomodoro: 'Pomodoro'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -595,7 +611,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "task"
+      modelProps: "user" | "task" | "pomodoro"
       txIsolationLevel: never
     }
     model: {
@@ -747,6 +763,80 @@ export namespace Prisma {
           }
         }
       }
+      Pomodoro: {
+        payload: Prisma.$PomodoroPayload<ExtArgs>
+        fields: Prisma.PomodoroFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PomodoroFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PomodoroPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PomodoroFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PomodoroPayload>
+          }
+          findFirst: {
+            args: Prisma.PomodoroFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PomodoroPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PomodoroFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PomodoroPayload>
+          }
+          findMany: {
+            args: Prisma.PomodoroFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PomodoroPayload>[]
+          }
+          create: {
+            args: Prisma.PomodoroCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PomodoroPayload>
+          }
+          createMany: {
+            args: Prisma.PomodoroCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.PomodoroDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PomodoroPayload>
+          }
+          update: {
+            args: Prisma.PomodoroUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PomodoroPayload>
+          }
+          deleteMany: {
+            args: Prisma.PomodoroDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PomodoroUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.PomodoroUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PomodoroPayload>
+          }
+          aggregate: {
+            args: Prisma.PomodoroAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePomodoro>
+          }
+          groupBy: {
+            args: Prisma.PomodoroGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PomodoroGroupByOutputType>[]
+          }
+          findRaw: {
+            args: Prisma.PomodoroFindRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          aggregateRaw: {
+            args: Prisma.PomodoroAggregateRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          count: {
+            args: Prisma.PomodoroCountArgs<ExtArgs>
+            result: $Utils.Optional<PomodoroCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -820,6 +910,7 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     user?: UserOmit
     task?: TaskOmit
+    pomodoro?: PomodoroOmit
   }
 
   /* Types for Logging */
@@ -915,10 +1006,12 @@ export namespace Prisma {
 
   export type UserCountOutputType = {
     tasks: number
+    pomodoros: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tasks?: boolean | UserCountOutputTypeCountTasksArgs
+    pomodoros?: boolean | UserCountOutputTypeCountPomodorosArgs
   }
 
   // Custom InputTypes
@@ -937,6 +1030,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountTasksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TaskWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountPomodorosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PomodoroWhereInput
   }
 
 
@@ -1175,6 +1275,7 @@ export namespace Prisma {
     shortBreakMinutes?: boolean
     longBreakMinutes?: boolean
     tasks?: boolean | User$tasksArgs<ExtArgs>
+    pomodoros?: boolean | User$pomodorosArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1194,6 +1295,7 @@ export namespace Prisma {
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "email" | "password" | "createdAt" | "workMinutes" | "shortBreakMinutes" | "longBreakMinutes", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tasks?: boolean | User$tasksArgs<ExtArgs>
+    pomodoros?: boolean | User$pomodorosArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -1201,6 +1303,7 @@ export namespace Prisma {
     name: "User"
     objects: {
       tasks: Prisma.$TaskPayload<ExtArgs>[]
+      pomodoros: Prisma.$PomodoroPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -1575,6 +1678,7 @@ export namespace Prisma {
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     tasks<T extends User$tasksArgs<ExtArgs> = {}>(args?: Subset<T, User$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    pomodoros<T extends User$pomodorosArgs<ExtArgs> = {}>(args?: Subset<T, User$pomodorosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PomodoroPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2003,6 +2107,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: TaskScalarFieldEnum | TaskScalarFieldEnum[]
+  }
+
+  /**
+   * User.pomodoros
+   */
+  export type User$pomodorosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Pomodoro
+     */
+    select?: PomodoroSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Pomodoro
+     */
+    omit?: PomodoroOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PomodoroInclude<ExtArgs> | null
+    where?: PomodoroWhereInput
+    orderBy?: PomodoroOrderByWithRelationInput | PomodoroOrderByWithRelationInput[]
+    cursor?: PomodoroWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PomodoroScalarFieldEnum | PomodoroScalarFieldEnum[]
   }
 
   /**
@@ -3015,6 +3143,1008 @@ export namespace Prisma {
 
 
   /**
+   * Model Pomodoro
+   */
+
+  export type AggregatePomodoro = {
+    _count: PomodoroCountAggregateOutputType | null
+    _avg: PomodoroAvgAggregateOutputType | null
+    _sum: PomodoroSumAggregateOutputType | null
+    _min: PomodoroMinAggregateOutputType | null
+    _max: PomodoroMaxAggregateOutputType | null
+  }
+
+  export type PomodoroAvgAggregateOutputType = {
+    pomodoro: number | null
+  }
+
+  export type PomodoroSumAggregateOutputType = {
+    pomodoro: number | null
+  }
+
+  export type PomodoroMinAggregateOutputType = {
+    id: string | null
+    pomodoro: number | null
+    completedAt: string | null
+    userId: string | null
+  }
+
+  export type PomodoroMaxAggregateOutputType = {
+    id: string | null
+    pomodoro: number | null
+    completedAt: string | null
+    userId: string | null
+  }
+
+  export type PomodoroCountAggregateOutputType = {
+    id: number
+    pomodoro: number
+    completedAt: number
+    userId: number
+    _all: number
+  }
+
+
+  export type PomodoroAvgAggregateInputType = {
+    pomodoro?: true
+  }
+
+  export type PomodoroSumAggregateInputType = {
+    pomodoro?: true
+  }
+
+  export type PomodoroMinAggregateInputType = {
+    id?: true
+    pomodoro?: true
+    completedAt?: true
+    userId?: true
+  }
+
+  export type PomodoroMaxAggregateInputType = {
+    id?: true
+    pomodoro?: true
+    completedAt?: true
+    userId?: true
+  }
+
+  export type PomodoroCountAggregateInputType = {
+    id?: true
+    pomodoro?: true
+    completedAt?: true
+    userId?: true
+    _all?: true
+  }
+
+  export type PomodoroAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Pomodoro to aggregate.
+     */
+    where?: PomodoroWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Pomodoros to fetch.
+     */
+    orderBy?: PomodoroOrderByWithRelationInput | PomodoroOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PomodoroWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Pomodoros from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Pomodoros.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Pomodoros
+    **/
+    _count?: true | PomodoroCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PomodoroAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PomodoroSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PomodoroMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PomodoroMaxAggregateInputType
+  }
+
+  export type GetPomodoroAggregateType<T extends PomodoroAggregateArgs> = {
+        [P in keyof T & keyof AggregatePomodoro]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePomodoro[P]>
+      : GetScalarType<T[P], AggregatePomodoro[P]>
+  }
+
+
+
+
+  export type PomodoroGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PomodoroWhereInput
+    orderBy?: PomodoroOrderByWithAggregationInput | PomodoroOrderByWithAggregationInput[]
+    by: PomodoroScalarFieldEnum[] | PomodoroScalarFieldEnum
+    having?: PomodoroScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PomodoroCountAggregateInputType | true
+    _avg?: PomodoroAvgAggregateInputType
+    _sum?: PomodoroSumAggregateInputType
+    _min?: PomodoroMinAggregateInputType
+    _max?: PomodoroMaxAggregateInputType
+  }
+
+  export type PomodoroGroupByOutputType = {
+    id: string
+    pomodoro: number
+    completedAt: string | null
+    userId: string
+    _count: PomodoroCountAggregateOutputType | null
+    _avg: PomodoroAvgAggregateOutputType | null
+    _sum: PomodoroSumAggregateOutputType | null
+    _min: PomodoroMinAggregateOutputType | null
+    _max: PomodoroMaxAggregateOutputType | null
+  }
+
+  type GetPomodoroGroupByPayload<T extends PomodoroGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PomodoroGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PomodoroGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PomodoroGroupByOutputType[P]>
+            : GetScalarType<T[P], PomodoroGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PomodoroSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    pomodoro?: boolean
+    completedAt?: boolean
+    userId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["pomodoro"]>
+
+
+
+  export type PomodoroSelectScalar = {
+    id?: boolean
+    pomodoro?: boolean
+    completedAt?: boolean
+    userId?: boolean
+  }
+
+  export type PomodoroOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "pomodoro" | "completedAt" | "userId", ExtArgs["result"]["pomodoro"]>
+  export type PomodoroInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $PomodoroPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Pomodoro"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      pomodoro: number
+      completedAt: string | null
+      userId: string
+    }, ExtArgs["result"]["pomodoro"]>
+    composites: {}
+  }
+
+  type PomodoroGetPayload<S extends boolean | null | undefined | PomodoroDefaultArgs> = $Result.GetResult<Prisma.$PomodoroPayload, S>
+
+  type PomodoroCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PomodoroFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PomodoroCountAggregateInputType | true
+    }
+
+  export interface PomodoroDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Pomodoro'], meta: { name: 'Pomodoro' } }
+    /**
+     * Find zero or one Pomodoro that matches the filter.
+     * @param {PomodoroFindUniqueArgs} args - Arguments to find a Pomodoro
+     * @example
+     * // Get one Pomodoro
+     * const pomodoro = await prisma.pomodoro.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PomodoroFindUniqueArgs>(args: SelectSubset<T, PomodoroFindUniqueArgs<ExtArgs>>): Prisma__PomodoroClient<$Result.GetResult<Prisma.$PomodoroPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Pomodoro that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PomodoroFindUniqueOrThrowArgs} args - Arguments to find a Pomodoro
+     * @example
+     * // Get one Pomodoro
+     * const pomodoro = await prisma.pomodoro.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PomodoroFindUniqueOrThrowArgs>(args: SelectSubset<T, PomodoroFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PomodoroClient<$Result.GetResult<Prisma.$PomodoroPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Pomodoro that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PomodoroFindFirstArgs} args - Arguments to find a Pomodoro
+     * @example
+     * // Get one Pomodoro
+     * const pomodoro = await prisma.pomodoro.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PomodoroFindFirstArgs>(args?: SelectSubset<T, PomodoroFindFirstArgs<ExtArgs>>): Prisma__PomodoroClient<$Result.GetResult<Prisma.$PomodoroPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Pomodoro that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PomodoroFindFirstOrThrowArgs} args - Arguments to find a Pomodoro
+     * @example
+     * // Get one Pomodoro
+     * const pomodoro = await prisma.pomodoro.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PomodoroFindFirstOrThrowArgs>(args?: SelectSubset<T, PomodoroFindFirstOrThrowArgs<ExtArgs>>): Prisma__PomodoroClient<$Result.GetResult<Prisma.$PomodoroPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Pomodoros that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PomodoroFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Pomodoros
+     * const pomodoros = await prisma.pomodoro.findMany()
+     * 
+     * // Get first 10 Pomodoros
+     * const pomodoros = await prisma.pomodoro.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const pomodoroWithIdOnly = await prisma.pomodoro.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PomodoroFindManyArgs>(args?: SelectSubset<T, PomodoroFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PomodoroPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Pomodoro.
+     * @param {PomodoroCreateArgs} args - Arguments to create a Pomodoro.
+     * @example
+     * // Create one Pomodoro
+     * const Pomodoro = await prisma.pomodoro.create({
+     *   data: {
+     *     // ... data to create a Pomodoro
+     *   }
+     * })
+     * 
+     */
+    create<T extends PomodoroCreateArgs>(args: SelectSubset<T, PomodoroCreateArgs<ExtArgs>>): Prisma__PomodoroClient<$Result.GetResult<Prisma.$PomodoroPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Pomodoros.
+     * @param {PomodoroCreateManyArgs} args - Arguments to create many Pomodoros.
+     * @example
+     * // Create many Pomodoros
+     * const pomodoro = await prisma.pomodoro.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PomodoroCreateManyArgs>(args?: SelectSubset<T, PomodoroCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Pomodoro.
+     * @param {PomodoroDeleteArgs} args - Arguments to delete one Pomodoro.
+     * @example
+     * // Delete one Pomodoro
+     * const Pomodoro = await prisma.pomodoro.delete({
+     *   where: {
+     *     // ... filter to delete one Pomodoro
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PomodoroDeleteArgs>(args: SelectSubset<T, PomodoroDeleteArgs<ExtArgs>>): Prisma__PomodoroClient<$Result.GetResult<Prisma.$PomodoroPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Pomodoro.
+     * @param {PomodoroUpdateArgs} args - Arguments to update one Pomodoro.
+     * @example
+     * // Update one Pomodoro
+     * const pomodoro = await prisma.pomodoro.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PomodoroUpdateArgs>(args: SelectSubset<T, PomodoroUpdateArgs<ExtArgs>>): Prisma__PomodoroClient<$Result.GetResult<Prisma.$PomodoroPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Pomodoros.
+     * @param {PomodoroDeleteManyArgs} args - Arguments to filter Pomodoros to delete.
+     * @example
+     * // Delete a few Pomodoros
+     * const { count } = await prisma.pomodoro.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PomodoroDeleteManyArgs>(args?: SelectSubset<T, PomodoroDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Pomodoros.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PomodoroUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Pomodoros
+     * const pomodoro = await prisma.pomodoro.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PomodoroUpdateManyArgs>(args: SelectSubset<T, PomodoroUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Pomodoro.
+     * @param {PomodoroUpsertArgs} args - Arguments to update or create a Pomodoro.
+     * @example
+     * // Update or create a Pomodoro
+     * const pomodoro = await prisma.pomodoro.upsert({
+     *   create: {
+     *     // ... data to create a Pomodoro
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Pomodoro we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PomodoroUpsertArgs>(args: SelectSubset<T, PomodoroUpsertArgs<ExtArgs>>): Prisma__PomodoroClient<$Result.GetResult<Prisma.$PomodoroPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Pomodoros that matches the filter.
+     * @param {PomodoroFindRawArgs} args - Select which filters you would like to apply.
+     * @example
+     * const pomodoro = await prisma.pomodoro.findRaw({
+     *   filter: { age: { $gt: 25 } }
+     * })
+     */
+    findRaw(args?: PomodoroFindRawArgs): Prisma.PrismaPromise<JsonObject>
+
+    /**
+     * Perform aggregation operations on a Pomodoro.
+     * @param {PomodoroAggregateRawArgs} args - Select which aggregations you would like to apply.
+     * @example
+     * const pomodoro = await prisma.pomodoro.aggregateRaw({
+     *   pipeline: [
+     *     { $match: { status: "registered" } },
+     *     { $group: { _id: "$country", total: { $sum: 1 } } }
+     *   ]
+     * })
+     */
+    aggregateRaw(args?: PomodoroAggregateRawArgs): Prisma.PrismaPromise<JsonObject>
+
+
+    /**
+     * Count the number of Pomodoros.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PomodoroCountArgs} args - Arguments to filter Pomodoros to count.
+     * @example
+     * // Count the number of Pomodoros
+     * const count = await prisma.pomodoro.count({
+     *   where: {
+     *     // ... the filter for the Pomodoros we want to count
+     *   }
+     * })
+    **/
+    count<T extends PomodoroCountArgs>(
+      args?: Subset<T, PomodoroCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PomodoroCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Pomodoro.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PomodoroAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PomodoroAggregateArgs>(args: Subset<T, PomodoroAggregateArgs>): Prisma.PrismaPromise<GetPomodoroAggregateType<T>>
+
+    /**
+     * Group by Pomodoro.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PomodoroGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PomodoroGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PomodoroGroupByArgs['orderBy'] }
+        : { orderBy?: PomodoroGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PomodoroGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPomodoroGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Pomodoro model
+   */
+  readonly fields: PomodoroFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Pomodoro.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PomodoroClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Pomodoro model
+   */
+  interface PomodoroFieldRefs {
+    readonly id: FieldRef<"Pomodoro", 'String'>
+    readonly pomodoro: FieldRef<"Pomodoro", 'Int'>
+    readonly completedAt: FieldRef<"Pomodoro", 'String'>
+    readonly userId: FieldRef<"Pomodoro", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Pomodoro findUnique
+   */
+  export type PomodoroFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Pomodoro
+     */
+    select?: PomodoroSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Pomodoro
+     */
+    omit?: PomodoroOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PomodoroInclude<ExtArgs> | null
+    /**
+     * Filter, which Pomodoro to fetch.
+     */
+    where: PomodoroWhereUniqueInput
+  }
+
+  /**
+   * Pomodoro findUniqueOrThrow
+   */
+  export type PomodoroFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Pomodoro
+     */
+    select?: PomodoroSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Pomodoro
+     */
+    omit?: PomodoroOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PomodoroInclude<ExtArgs> | null
+    /**
+     * Filter, which Pomodoro to fetch.
+     */
+    where: PomodoroWhereUniqueInput
+  }
+
+  /**
+   * Pomodoro findFirst
+   */
+  export type PomodoroFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Pomodoro
+     */
+    select?: PomodoroSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Pomodoro
+     */
+    omit?: PomodoroOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PomodoroInclude<ExtArgs> | null
+    /**
+     * Filter, which Pomodoro to fetch.
+     */
+    where?: PomodoroWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Pomodoros to fetch.
+     */
+    orderBy?: PomodoroOrderByWithRelationInput | PomodoroOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Pomodoros.
+     */
+    cursor?: PomodoroWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Pomodoros from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Pomodoros.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Pomodoros.
+     */
+    distinct?: PomodoroScalarFieldEnum | PomodoroScalarFieldEnum[]
+  }
+
+  /**
+   * Pomodoro findFirstOrThrow
+   */
+  export type PomodoroFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Pomodoro
+     */
+    select?: PomodoroSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Pomodoro
+     */
+    omit?: PomodoroOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PomodoroInclude<ExtArgs> | null
+    /**
+     * Filter, which Pomodoro to fetch.
+     */
+    where?: PomodoroWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Pomodoros to fetch.
+     */
+    orderBy?: PomodoroOrderByWithRelationInput | PomodoroOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Pomodoros.
+     */
+    cursor?: PomodoroWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Pomodoros from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Pomodoros.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Pomodoros.
+     */
+    distinct?: PomodoroScalarFieldEnum | PomodoroScalarFieldEnum[]
+  }
+
+  /**
+   * Pomodoro findMany
+   */
+  export type PomodoroFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Pomodoro
+     */
+    select?: PomodoroSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Pomodoro
+     */
+    omit?: PomodoroOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PomodoroInclude<ExtArgs> | null
+    /**
+     * Filter, which Pomodoros to fetch.
+     */
+    where?: PomodoroWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Pomodoros to fetch.
+     */
+    orderBy?: PomodoroOrderByWithRelationInput | PomodoroOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Pomodoros.
+     */
+    cursor?: PomodoroWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Pomodoros from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Pomodoros.
+     */
+    skip?: number
+    distinct?: PomodoroScalarFieldEnum | PomodoroScalarFieldEnum[]
+  }
+
+  /**
+   * Pomodoro create
+   */
+  export type PomodoroCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Pomodoro
+     */
+    select?: PomodoroSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Pomodoro
+     */
+    omit?: PomodoroOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PomodoroInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Pomodoro.
+     */
+    data: XOR<PomodoroCreateInput, PomodoroUncheckedCreateInput>
+  }
+
+  /**
+   * Pomodoro createMany
+   */
+  export type PomodoroCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Pomodoros.
+     */
+    data: PomodoroCreateManyInput | PomodoroCreateManyInput[]
+  }
+
+  /**
+   * Pomodoro update
+   */
+  export type PomodoroUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Pomodoro
+     */
+    select?: PomodoroSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Pomodoro
+     */
+    omit?: PomodoroOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PomodoroInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Pomodoro.
+     */
+    data: XOR<PomodoroUpdateInput, PomodoroUncheckedUpdateInput>
+    /**
+     * Choose, which Pomodoro to update.
+     */
+    where: PomodoroWhereUniqueInput
+  }
+
+  /**
+   * Pomodoro updateMany
+   */
+  export type PomodoroUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Pomodoros.
+     */
+    data: XOR<PomodoroUpdateManyMutationInput, PomodoroUncheckedUpdateManyInput>
+    /**
+     * Filter which Pomodoros to update
+     */
+    where?: PomodoroWhereInput
+    /**
+     * Limit how many Pomodoros to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Pomodoro upsert
+   */
+  export type PomodoroUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Pomodoro
+     */
+    select?: PomodoroSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Pomodoro
+     */
+    omit?: PomodoroOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PomodoroInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Pomodoro to update in case it exists.
+     */
+    where: PomodoroWhereUniqueInput
+    /**
+     * In case the Pomodoro found by the `where` argument doesn't exist, create a new Pomodoro with this data.
+     */
+    create: XOR<PomodoroCreateInput, PomodoroUncheckedCreateInput>
+    /**
+     * In case the Pomodoro was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PomodoroUpdateInput, PomodoroUncheckedUpdateInput>
+  }
+
+  /**
+   * Pomodoro delete
+   */
+  export type PomodoroDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Pomodoro
+     */
+    select?: PomodoroSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Pomodoro
+     */
+    omit?: PomodoroOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PomodoroInclude<ExtArgs> | null
+    /**
+     * Filter which Pomodoro to delete.
+     */
+    where: PomodoroWhereUniqueInput
+  }
+
+  /**
+   * Pomodoro deleteMany
+   */
+  export type PomodoroDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Pomodoros to delete
+     */
+    where?: PomodoroWhereInput
+    /**
+     * Limit how many Pomodoros to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Pomodoro findRaw
+   */
+  export type PomodoroFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The query predicate filter. If unspecified, then all documents in the collection will match the predicate. ${@link https://docs.mongodb.com/manual/reference/operator/query MongoDB Docs}.
+     */
+    filter?: InputJsonValue
+    /**
+     * Additional options to pass to the `find` command ${@link https://docs.mongodb.com/manual/reference/command/find/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * Pomodoro aggregateRaw
+   */
+  export type PomodoroAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * An array of aggregation stages to process and transform the document stream via the aggregation pipeline. ${@link https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline MongoDB Docs}.
+     */
+    pipeline?: InputJsonValue[]
+    /**
+     * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * Pomodoro without action
+   */
+  export type PomodoroDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Pomodoro
+     */
+    select?: PomodoroSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Pomodoro
+     */
+    omit?: PomodoroOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PomodoroInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -3042,6 +4172,16 @@ export namespace Prisma {
   };
 
   export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum]
+
+
+  export const PomodoroScalarFieldEnum: {
+    id: 'id',
+    pomodoro: 'pomodoro',
+    completedAt: 'completedAt',
+    userId: 'userId'
+  };
+
+  export type PomodoroScalarFieldEnum = (typeof PomodoroScalarFieldEnum)[keyof typeof PomodoroScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -3144,6 +4284,7 @@ export namespace Prisma {
     shortBreakMinutes?: IntFilter<"User"> | number
     longBreakMinutes?: IntFilter<"User"> | number
     tasks?: TaskListRelationFilter
+    pomodoros?: PomodoroListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -3156,6 +4297,7 @@ export namespace Prisma {
     shortBreakMinutes?: SortOrder
     longBreakMinutes?: SortOrder
     tasks?: TaskOrderByRelationAggregateInput
+    pomodoros?: PomodoroOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -3171,6 +4313,7 @@ export namespace Prisma {
     shortBreakMinutes?: IntFilter<"User"> | number
     longBreakMinutes?: IntFilter<"User"> | number
     tasks?: TaskListRelationFilter
+    pomodoros?: PomodoroListRelationFilter
   }, "id" | "username" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -3263,6 +4406,58 @@ export namespace Prisma {
     userId?: StringWithAggregatesFilter<"Task"> | string
   }
 
+  export type PomodoroWhereInput = {
+    AND?: PomodoroWhereInput | PomodoroWhereInput[]
+    OR?: PomodoroWhereInput[]
+    NOT?: PomodoroWhereInput | PomodoroWhereInput[]
+    id?: StringFilter<"Pomodoro"> | string
+    pomodoro?: IntFilter<"Pomodoro"> | number
+    completedAt?: StringNullableFilter<"Pomodoro"> | string | null
+    userId?: StringFilter<"Pomodoro"> | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type PomodoroOrderByWithRelationInput = {
+    id?: SortOrder
+    pomodoro?: SortOrder
+    completedAt?: SortOrder
+    userId?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type PomodoroWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: PomodoroWhereInput | PomodoroWhereInput[]
+    OR?: PomodoroWhereInput[]
+    NOT?: PomodoroWhereInput | PomodoroWhereInput[]
+    pomodoro?: IntFilter<"Pomodoro"> | number
+    completedAt?: StringNullableFilter<"Pomodoro"> | string | null
+    userId?: StringFilter<"Pomodoro"> | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type PomodoroOrderByWithAggregationInput = {
+    id?: SortOrder
+    pomodoro?: SortOrder
+    completedAt?: SortOrder
+    userId?: SortOrder
+    _count?: PomodoroCountOrderByAggregateInput
+    _avg?: PomodoroAvgOrderByAggregateInput
+    _max?: PomodoroMaxOrderByAggregateInput
+    _min?: PomodoroMinOrderByAggregateInput
+    _sum?: PomodoroSumOrderByAggregateInput
+  }
+
+  export type PomodoroScalarWhereWithAggregatesInput = {
+    AND?: PomodoroScalarWhereWithAggregatesInput | PomodoroScalarWhereWithAggregatesInput[]
+    OR?: PomodoroScalarWhereWithAggregatesInput[]
+    NOT?: PomodoroScalarWhereWithAggregatesInput | PomodoroScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Pomodoro"> | string
+    pomodoro?: IntWithAggregatesFilter<"Pomodoro"> | number
+    completedAt?: StringNullableWithAggregatesFilter<"Pomodoro"> | string | null
+    userId?: StringWithAggregatesFilter<"Pomodoro"> | string
+  }
+
   export type UserCreateInput = {
     id?: string
     username: string
@@ -3273,6 +4468,7 @@ export namespace Prisma {
     shortBreakMinutes?: number
     longBreakMinutes?: number
     tasks?: TaskCreateNestedManyWithoutUserInput
+    pomodoros?: PomodoroCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -3285,6 +4481,7 @@ export namespace Prisma {
     shortBreakMinutes?: number
     longBreakMinutes?: number
     tasks?: TaskUncheckedCreateNestedManyWithoutUserInput
+    pomodoros?: PomodoroUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -3296,6 +4493,7 @@ export namespace Prisma {
     shortBreakMinutes?: IntFieldUpdateOperationsInput | number
     longBreakMinutes?: IntFieldUpdateOperationsInput | number
     tasks?: TaskUpdateManyWithoutUserNestedInput
+    pomodoros?: PomodoroUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -3307,6 +4505,7 @@ export namespace Prisma {
     shortBreakMinutes?: IntFieldUpdateOperationsInput | number
     longBreakMinutes?: IntFieldUpdateOperationsInput | number
     tasks?: TaskUncheckedUpdateManyWithoutUserNestedInput
+    pomodoros?: PomodoroUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -3398,6 +4597,50 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
   }
 
+  export type PomodoroCreateInput = {
+    id?: string
+    pomodoro?: number
+    completedAt?: string | null
+    user: UserCreateNestedOneWithoutPomodorosInput
+  }
+
+  export type PomodoroUncheckedCreateInput = {
+    id?: string
+    pomodoro?: number
+    completedAt?: string | null
+    userId: string
+  }
+
+  export type PomodoroUpdateInput = {
+    pomodoro?: IntFieldUpdateOperationsInput | number
+    completedAt?: NullableStringFieldUpdateOperationsInput | string | null
+    user?: UserUpdateOneRequiredWithoutPomodorosNestedInput
+  }
+
+  export type PomodoroUncheckedUpdateInput = {
+    pomodoro?: IntFieldUpdateOperationsInput | number
+    completedAt?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type PomodoroCreateManyInput = {
+    id?: string
+    pomodoro?: number
+    completedAt?: string | null
+    userId: string
+  }
+
+  export type PomodoroUpdateManyMutationInput = {
+    pomodoro?: IntFieldUpdateOperationsInput | number
+    completedAt?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PomodoroUncheckedUpdateManyInput = {
+    pomodoro?: IntFieldUpdateOperationsInput | number
+    completedAt?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -3441,7 +4684,17 @@ export namespace Prisma {
     none?: TaskWhereInput
   }
 
+  export type PomodoroListRelationFilter = {
+    every?: PomodoroWhereInput
+    some?: PomodoroWhereInput
+    none?: PomodoroWhereInput
+  }
+
   export type TaskOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PomodoroOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -3610,6 +4863,70 @@ export namespace Prisma {
     isSet?: boolean
   }
 
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+    isSet?: boolean
+  }
+
+  export type PomodoroCountOrderByAggregateInput = {
+    id?: SortOrder
+    pomodoro?: SortOrder
+    completedAt?: SortOrder
+    userId?: SortOrder
+  }
+
+  export type PomodoroAvgOrderByAggregateInput = {
+    pomodoro?: SortOrder
+  }
+
+  export type PomodoroMaxOrderByAggregateInput = {
+    id?: SortOrder
+    pomodoro?: SortOrder
+    completedAt?: SortOrder
+    userId?: SortOrder
+  }
+
+  export type PomodoroMinOrderByAggregateInput = {
+    id?: SortOrder
+    pomodoro?: SortOrder
+    completedAt?: SortOrder
+    userId?: SortOrder
+  }
+
+  export type PomodoroSumOrderByAggregateInput = {
+    pomodoro?: SortOrder
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+    isSet?: boolean
+  }
+
   export type TaskCreateNestedManyWithoutUserInput = {
     create?: XOR<TaskCreateWithoutUserInput, TaskUncheckedCreateWithoutUserInput> | TaskCreateWithoutUserInput[] | TaskUncheckedCreateWithoutUserInput[]
     connectOrCreate?: TaskCreateOrConnectWithoutUserInput | TaskCreateOrConnectWithoutUserInput[]
@@ -3617,11 +4934,25 @@ export namespace Prisma {
     connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
   }
 
+  export type PomodoroCreateNestedManyWithoutUserInput = {
+    create?: XOR<PomodoroCreateWithoutUserInput, PomodoroUncheckedCreateWithoutUserInput> | PomodoroCreateWithoutUserInput[] | PomodoroUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PomodoroCreateOrConnectWithoutUserInput | PomodoroCreateOrConnectWithoutUserInput[]
+    createMany?: PomodoroCreateManyUserInputEnvelope
+    connect?: PomodoroWhereUniqueInput | PomodoroWhereUniqueInput[]
+  }
+
   export type TaskUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<TaskCreateWithoutUserInput, TaskUncheckedCreateWithoutUserInput> | TaskCreateWithoutUserInput[] | TaskUncheckedCreateWithoutUserInput[]
     connectOrCreate?: TaskCreateOrConnectWithoutUserInput | TaskCreateOrConnectWithoutUserInput[]
     createMany?: TaskCreateManyUserInputEnvelope
     connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+  }
+
+  export type PomodoroUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<PomodoroCreateWithoutUserInput, PomodoroUncheckedCreateWithoutUserInput> | PomodoroCreateWithoutUserInput[] | PomodoroUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PomodoroCreateOrConnectWithoutUserInput | PomodoroCreateOrConnectWithoutUserInput[]
+    createMany?: PomodoroCreateManyUserInputEnvelope
+    connect?: PomodoroWhereUniqueInput | PomodoroWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -3654,6 +4985,20 @@ export namespace Prisma {
     deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
   }
 
+  export type PomodoroUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PomodoroCreateWithoutUserInput, PomodoroUncheckedCreateWithoutUserInput> | PomodoroCreateWithoutUserInput[] | PomodoroUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PomodoroCreateOrConnectWithoutUserInput | PomodoroCreateOrConnectWithoutUserInput[]
+    upsert?: PomodoroUpsertWithWhereUniqueWithoutUserInput | PomodoroUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PomodoroCreateManyUserInputEnvelope
+    set?: PomodoroWhereUniqueInput | PomodoroWhereUniqueInput[]
+    disconnect?: PomodoroWhereUniqueInput | PomodoroWhereUniqueInput[]
+    delete?: PomodoroWhereUniqueInput | PomodoroWhereUniqueInput[]
+    connect?: PomodoroWhereUniqueInput | PomodoroWhereUniqueInput[]
+    update?: PomodoroUpdateWithWhereUniqueWithoutUserInput | PomodoroUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PomodoroUpdateManyWithWhereWithoutUserInput | PomodoroUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PomodoroScalarWhereInput | PomodoroScalarWhereInput[]
+  }
+
   export type TaskUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<TaskCreateWithoutUserInput, TaskUncheckedCreateWithoutUserInput> | TaskCreateWithoutUserInput[] | TaskUncheckedCreateWithoutUserInput[]
     connectOrCreate?: TaskCreateOrConnectWithoutUserInput | TaskCreateOrConnectWithoutUserInput[]
@@ -3666,6 +5011,20 @@ export namespace Prisma {
     update?: TaskUpdateWithWhereUniqueWithoutUserInput | TaskUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: TaskUpdateManyWithWhereWithoutUserInput | TaskUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
+  }
+
+  export type PomodoroUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PomodoroCreateWithoutUserInput, PomodoroUncheckedCreateWithoutUserInput> | PomodoroCreateWithoutUserInput[] | PomodoroUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PomodoroCreateOrConnectWithoutUserInput | PomodoroCreateOrConnectWithoutUserInput[]
+    upsert?: PomodoroUpsertWithWhereUniqueWithoutUserInput | PomodoroUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PomodoroCreateManyUserInputEnvelope
+    set?: PomodoroWhereUniqueInput | PomodoroWhereUniqueInput[]
+    disconnect?: PomodoroWhereUniqueInput | PomodoroWhereUniqueInput[]
+    delete?: PomodoroWhereUniqueInput | PomodoroWhereUniqueInput[]
+    connect?: PomodoroWhereUniqueInput | PomodoroWhereUniqueInput[]
+    update?: PomodoroUpdateWithWhereUniqueWithoutUserInput | PomodoroUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PomodoroUpdateManyWithWhereWithoutUserInput | PomodoroUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PomodoroScalarWhereInput | PomodoroScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutTasksInput = {
@@ -3689,6 +5048,25 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutTasksInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTasksInput, UserUpdateWithoutTasksInput>, UserUncheckedUpdateWithoutTasksInput>
+  }
+
+  export type UserCreateNestedOneWithoutPomodorosInput = {
+    create?: XOR<UserCreateWithoutPomodorosInput, UserUncheckedCreateWithoutPomodorosInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPomodorosInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
+    unset?: boolean
+  }
+
+  export type UserUpdateOneRequiredWithoutPomodorosNestedInput = {
+    create?: XOR<UserCreateWithoutPomodorosInput, UserUncheckedCreateWithoutPomodorosInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPomodorosInput
+    upsert?: UserUpsertWithoutPomodorosInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPomodorosInput, UserUpdateWithoutPomodorosInput>, UserUncheckedUpdateWithoutPomodorosInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -3837,6 +5215,39 @@ export namespace Prisma {
     isSet?: boolean
   }
 
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+    isSet?: boolean
+  }
+
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+    isSet?: boolean
+  }
+
   export type TaskCreateWithoutUserInput = {
     id?: string
     description: string
@@ -3860,6 +5271,27 @@ export namespace Prisma {
 
   export type TaskCreateManyUserInputEnvelope = {
     data: TaskCreateManyUserInput | TaskCreateManyUserInput[]
+  }
+
+  export type PomodoroCreateWithoutUserInput = {
+    id?: string
+    pomodoro?: number
+    completedAt?: string | null
+  }
+
+  export type PomodoroUncheckedCreateWithoutUserInput = {
+    id?: string
+    pomodoro?: number
+    completedAt?: string | null
+  }
+
+  export type PomodoroCreateOrConnectWithoutUserInput = {
+    where: PomodoroWhereUniqueInput
+    create: XOR<PomodoroCreateWithoutUserInput, PomodoroUncheckedCreateWithoutUserInput>
+  }
+
+  export type PomodoroCreateManyUserInputEnvelope = {
+    data: PomodoroCreateManyUserInput | PomodoroCreateManyUserInput[]
   }
 
   export type TaskUpsertWithWhereUniqueWithoutUserInput = {
@@ -3890,6 +5322,32 @@ export namespace Prisma {
     userId?: StringFilter<"Task"> | string
   }
 
+  export type PomodoroUpsertWithWhereUniqueWithoutUserInput = {
+    where: PomodoroWhereUniqueInput
+    update: XOR<PomodoroUpdateWithoutUserInput, PomodoroUncheckedUpdateWithoutUserInput>
+    create: XOR<PomodoroCreateWithoutUserInput, PomodoroUncheckedCreateWithoutUserInput>
+  }
+
+  export type PomodoroUpdateWithWhereUniqueWithoutUserInput = {
+    where: PomodoroWhereUniqueInput
+    data: XOR<PomodoroUpdateWithoutUserInput, PomodoroUncheckedUpdateWithoutUserInput>
+  }
+
+  export type PomodoroUpdateManyWithWhereWithoutUserInput = {
+    where: PomodoroScalarWhereInput
+    data: XOR<PomodoroUpdateManyMutationInput, PomodoroUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type PomodoroScalarWhereInput = {
+    AND?: PomodoroScalarWhereInput | PomodoroScalarWhereInput[]
+    OR?: PomodoroScalarWhereInput[]
+    NOT?: PomodoroScalarWhereInput | PomodoroScalarWhereInput[]
+    id?: StringFilter<"Pomodoro"> | string
+    pomodoro?: IntFilter<"Pomodoro"> | number
+    completedAt?: StringNullableFilter<"Pomodoro"> | string | null
+    userId?: StringFilter<"Pomodoro"> | string
+  }
+
   export type UserCreateWithoutTasksInput = {
     id?: string
     username: string
@@ -3899,6 +5357,7 @@ export namespace Prisma {
     workMinutes?: number
     shortBreakMinutes?: number
     longBreakMinutes?: number
+    pomodoros?: PomodoroCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTasksInput = {
@@ -3910,6 +5369,7 @@ export namespace Prisma {
     workMinutes?: number
     shortBreakMinutes?: number
     longBreakMinutes?: number
+    pomodoros?: PomodoroUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTasksInput = {
@@ -3936,6 +5396,7 @@ export namespace Prisma {
     workMinutes?: IntFieldUpdateOperationsInput | number
     shortBreakMinutes?: IntFieldUpdateOperationsInput | number
     longBreakMinutes?: IntFieldUpdateOperationsInput | number
+    pomodoros?: PomodoroUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTasksInput = {
@@ -3946,6 +5407,69 @@ export namespace Prisma {
     workMinutes?: IntFieldUpdateOperationsInput | number
     shortBreakMinutes?: IntFieldUpdateOperationsInput | number
     longBreakMinutes?: IntFieldUpdateOperationsInput | number
+    pomodoros?: PomodoroUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutPomodorosInput = {
+    id?: string
+    username: string
+    email: string
+    password: string
+    createdAt?: Date | string
+    workMinutes?: number
+    shortBreakMinutes?: number
+    longBreakMinutes?: number
+    tasks?: TaskCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutPomodorosInput = {
+    id?: string
+    username: string
+    email: string
+    password: string
+    createdAt?: Date | string
+    workMinutes?: number
+    shortBreakMinutes?: number
+    longBreakMinutes?: number
+    tasks?: TaskUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutPomodorosInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutPomodorosInput, UserUncheckedCreateWithoutPomodorosInput>
+  }
+
+  export type UserUpsertWithoutPomodorosInput = {
+    update: XOR<UserUpdateWithoutPomodorosInput, UserUncheckedUpdateWithoutPomodorosInput>
+    create: XOR<UserCreateWithoutPomodorosInput, UserUncheckedCreateWithoutPomodorosInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutPomodorosInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutPomodorosInput, UserUncheckedUpdateWithoutPomodorosInput>
+  }
+
+  export type UserUpdateWithoutPomodorosInput = {
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    workMinutes?: IntFieldUpdateOperationsInput | number
+    shortBreakMinutes?: IntFieldUpdateOperationsInput | number
+    longBreakMinutes?: IntFieldUpdateOperationsInput | number
+    tasks?: TaskUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutPomodorosInput = {
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    workMinutes?: IntFieldUpdateOperationsInput | number
+    shortBreakMinutes?: IntFieldUpdateOperationsInput | number
+    longBreakMinutes?: IntFieldUpdateOperationsInput | number
+    tasks?: TaskUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type TaskCreateManyUserInput = {
@@ -3954,6 +5478,12 @@ export namespace Prisma {
     completed: boolean
     createdAt?: Date | string
     completedAt?: Date | string | null
+  }
+
+  export type PomodoroCreateManyUserInput = {
+    id?: string
+    pomodoro?: number
+    completedAt?: string | null
   }
 
   export type TaskUpdateWithoutUserInput = {
@@ -3975,6 +5505,21 @@ export namespace Prisma {
     completed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PomodoroUpdateWithoutUserInput = {
+    pomodoro?: IntFieldUpdateOperationsInput | number
+    completedAt?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PomodoroUncheckedUpdateWithoutUserInput = {
+    pomodoro?: IntFieldUpdateOperationsInput | number
+    completedAt?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PomodoroUncheckedUpdateManyWithoutUserInput = {
+    pomodoro?: IntFieldUpdateOperationsInput | number
+    completedAt?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
 

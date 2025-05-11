@@ -1,4 +1,4 @@
-### Benutzerregistrierung
+### User Registration
 POST http://localhost:3000/auth/signup
 Content-Type: application/json
 
@@ -8,7 +8,7 @@ Content-Type: application/json
   "password": "<PASSWORD>"
 }
 
-### Benutzer-Login
+### User Login
 POST http://localhost:3000/auth/login
 Content-Type: application/json
 
@@ -17,11 +17,11 @@ Content-Type: application/json
   "password": "<PASSWORD>"
 }
 
-### Authentifizierte Anfrage
+### Authenticated Request
 GET http://localhost:3000/tasks/<userId>
 Authorization: Bearer <TOKEN>
 
-### Neue Aufgabe erstellen
+### Create New Task
 POST http://localhost:3000/tasks
 Content-Type: application/json
 Authorization: Bearer <TOKEN>
@@ -31,7 +31,7 @@ Authorization: Bearer <TOKEN>
   "user": "<USER_ID>"
 }
 
-### Aufgabe abschließen
+### Complete Task
 PATCH http://localhost:3000/tasks/<taskId>/complete
 Content-Type: application/json
 Authorization: Bearer <TOKEN>
@@ -41,7 +41,7 @@ Authorization: Bearer <TOKEN>
   "completedAt": "<DATE_TIME>"
 }
 
-### Aufgabe aktualisieren
+### Update Task
 PATCH http://localhost:3000/tasks/<taskId>/update
 Content-Type: application/json
 Authorization: Bearer <TOKEN>
@@ -50,7 +50,7 @@ Authorization: Bearer <TOKEN>
   "description": "<UPDATED_TASK_DESCRIPTION>"
 }
 
-### Pomodoro hinzufügen
+### Add Pomodoro
 POST http://localhost:3000/tasks/<userId>/pomodoro
 Content-Type: application/json
 Authorization: Bearer <TOKEN>
@@ -59,9 +59,26 @@ Authorization: Bearer <TOKEN>
   "completedAt": "<DATE_TIME>"
 }
 
-### Aufgabe löschen
+### Update Pomodoro timer settings
+PATCH http://localhost:3000/users/<userId>/settings
+Content-Type: application/json
+Authorization: Bearer <TOKEN>
+
+{
+  "workMinutes": <WORK_MINUTES>,
+  "shortBreakMinutes": <SHORT_BREAK_MINUTES>,
+  "longBreakMinutes": <LONG_BREAK_MINUTES>
+}
+
+### Delete Task
 DELETE http://localhost:3000/tasks/<taskId>
+Authorization: Bearer <TOKEN>
+
+### Delete user and all tasks
+DELETE http://localhost:3000/users/<userId>
 Authorization: Bearer <TOKEN>
 
 ### Get endpoints
 GET http://localhost:3000/endpoints
+
+
