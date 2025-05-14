@@ -12,7 +12,7 @@ const generateToken = (userId) => {
 };
 
 router.post('/signup', async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, password } = req.body;
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -20,7 +20,6 @@ router.post('/signup', async (req, res) => {
     const user = await prisma.user.create({
       data: {
         username,
-        email,
         password: hashedPassword,
       },
     });
@@ -31,7 +30,6 @@ router.post('/signup', async (req, res) => {
       user: {
         id: user.id,
         username: user.username,
-        email: user.email,
       },
       token,
     });
@@ -41,11 +39,11 @@ router.post('/signup', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
   try {
     const user = await prisma.user.findUnique({
-      where: { email },
+      where: { username },
     });
 
     if (!user) {
@@ -64,7 +62,6 @@ router.post('/login', async (req, res) => {
       user: {
         id: user.id,
         username: user.username,
-        email: user.email,
       },
       token,
     });
