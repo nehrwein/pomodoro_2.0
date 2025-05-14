@@ -10,7 +10,7 @@ const PORT = 3000;
 // Middleware
 app.use(express.json());
 app.use(cors({
-  origin: "https://pomodoro-2-0.onrender.com",
+  origin: "http://localhost:5173",
   credentials: true
 }));
 
