@@ -151,6 +151,10 @@ const config = {
         "fromEnvVar": null,
         "value": "windows",
         "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "debian-openssl-3.0.x"
       }
     ],
     "previewFeatures": [],
@@ -177,8 +181,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"app/generated/prisma/client\"\n}\n\ndatasource db {\n  provider = \"mongodb\"\n  url      = env(\"DATABASE_URI\")\n}\n\nmodel User {\n  id                String     @id @default(auto()) @map(\"_id\") @db.ObjectId\n  username          String     @unique\n  email             String     @unique\n  password          String\n  createdAt         DateTime   @default(now())\n  workMinutes       Int        @default(25)\n  shortBreakMinutes Int        @default(5)\n  longBreakMinutes  Int        @default(15)\n  tasks             Task[]\n  pomodoros         Pomodoro[]\n}\n\nmodel Task {\n  id          String    @id @default(auto()) @map(\"_id\") @db.ObjectId\n  description String\n  completed   Boolean\n  createdAt   DateTime  @default(now())\n  completedAt DateTime?\n  userId      String    @db.ObjectId\n  user        User      @relation(fields: [userId], references: [id])\n}\n\nmodel Pomodoro {\n  id          String  @id @default(auto()) @map(\"_id\") @db.ObjectId\n  pomodoro    Int     @default(1)\n  completedAt String?\n  userId      String  @db.ObjectId\n  user        User    @relation(fields: [userId], references: [id])\n}\n",
-  "inlineSchemaHash": "ba0abb7923a92d1affcff2708ec11633ad1d25225050305049d3b594923dc12d",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"app/generated/prisma/client\"\n  binaryTargets = [\"native\", \"debian-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"mongodb\"\n  url      = env(\"DATABASE_URI\")\n}\n\nmodel User {\n  id                String     @id @default(auto()) @map(\"_id\") @db.ObjectId\n  username          String     @unique\n  email             String     @unique\n  password          String\n  createdAt         DateTime   @default(now())\n  workMinutes       Int        @default(25)\n  shortBreakMinutes Int        @default(5)\n  longBreakMinutes  Int        @default(15)\n  tasks             Task[]\n  pomodoros         Pomodoro[]\n}\n\nmodel Task {\n  id          String    @id @default(auto()) @map(\"_id\") @db.ObjectId\n  description String\n  completed   Boolean\n  createdAt   DateTime  @default(now())\n  completedAt DateTime?\n  userId      String    @db.ObjectId\n  user        User      @relation(fields: [userId], references: [id])\n}\n\nmodel Pomodoro {\n  id          String  @id @default(auto()) @map(\"_id\") @db.ObjectId\n  pomodoro    Int     @default(1)\n  completedAt String?\n  userId      String  @db.ObjectId\n  user        User    @relation(fields: [userId], references: [id])\n}\n",
+  "inlineSchemaHash": "e2d03c1a00d305d97c68e6de7d5185895c33fa174d437a7f6621a4a82fb26ded",
   "copyEngine": true
 }
 
@@ -219,6 +223,10 @@ Object.assign(exports, Prisma)
 // file annotations for bundling tools to include these files
 path.join(__dirname, "query_engine-windows.dll.node");
 path.join(process.cwd(), "prisma/app/generated/prisma/client/query_engine-windows.dll.node")
+
+// file annotations for bundling tools to include these files
+path.join(__dirname, "libquery_engine-debian-openssl-3.0.x.so.node");
+path.join(process.cwd(), "prisma/app/generated/prisma/client/libquery_engine-debian-openssl-3.0.x.so.node")
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
 path.join(process.cwd(), "prisma/app/generated/prisma/client/schema.prisma")
