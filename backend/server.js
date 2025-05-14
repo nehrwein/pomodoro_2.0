@@ -2,12 +2,17 @@ const express = require('express');
 const authRoutes = require('./routes/auth');
 const taskRoutes = require('./routes/tasks');
 const userRoutes = require('./routes/user');
+const cors = require('cors');
 
 const app = express();
 const PORT = 3000;
 
 // Middleware
 app.use(express.json());
+app.use(cors({
+  origin: "https://pomodoro-2-0.onrender.com",
+  credentials: true
+}));
 
 // Routes
 app.get('/', (req, res) => {
