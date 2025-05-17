@@ -1,19 +1,19 @@
-import axios from "axios";
-import { BASE_URL } from "./constants";
-import { useUserStore } from "./useUserStore";
+import axios from "axios"
+import { BASE_URL } from "./constants"
+import { useUserStore } from "./useUserStore"
 
 const api = axios.create({
-  baseURL: BASE_URL,
-});
+  baseURL: import.meta.env.DEV ? "" : BASE_URL,
+})
 
 api.interceptors.request.use((config) => {
-  const token = useUserStore.getState().accessToken;
+  const token = useUserStore.getState().accessToken
   if (token) {
-    config.headers = config.headers || {};
-    config.headers["Authorization"] = `Bearer ${token}`;
+    config.headers = config.headers || {}
+    config.headers["Authorization"] = `Bearer ${token}`
   }
-  config.headers = config.headers || {};
-  config.headers["Content-Type"] = "application/json";
-  return config;
-});
-export default api;
+  config.headers = config.headers || {}
+  config.headers["Content-Type"] = "application/json"
+  return config
+})
+export default api
