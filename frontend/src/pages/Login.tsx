@@ -1,81 +1,83 @@
-import { useMutation } from "@tanstack/react-query"
-import { AxiosError } from "axios"
-import { useUserStore } from "@/lib/useUserStore"
-import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
-import api from "@/lib/axios"
-import { Button } from "@/components/ui/button"
+import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import { useUserStore } from "@/lib/useUserStore";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "@/lib/axios";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 function Login() {
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
-  const [mode, setMode] = useState("signin")
-  const accessToken = useUserStore((state) => state.accessToken)
-  const error = useUserStore((state) => state.error)
-  const setAccessToken = useUserStore((state) => state.setAccessToken)
-  const setUserId = useUserStore((state) => state.setUserId)
-  const setUsernameStore = useUserStore((state) => state.setUsername)
-  const setError = useUserStore((state) => state.setError)
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [mode, setMode] = useState("login");
+  const {
+    accessToken,
+    error,
+    setAccessToken,
+    setUserId,
+    setUsername: setUsernameStore,
+    setError,
+  } = useUserStore();
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (accessToken) {
-      navigate("/")
+      navigate("/");
     }
-  }, [accessToken, navigate])
+  }, [accessToken, navigate]);
 
   const loginMutation = useMutation({
     mutationFn: async ({
       username,
       password,
     }: {
-      username: string
-      password: string
+      username: string;
+      password: string;
     }) => {
-      const response = await api.post(`auth/${mode}`, { username, password })
-      return response.data
+      const response = await api.post(`auth/${mode}`, { username, password });
+      return response.data;
     },
     onSuccess: (data) => {
-      setAccessToken(data.token)
-      setUserId(data.user.id)
-      setUsernameStore(data.user.username)
-      setError(null)
+      setAccessToken(data.token);
+      setUserId(data.user.id);
+      setUsernameStore(data.user.username);
+      setError(null);
     },
     onError: (error: AxiosError) => {
-      setError(error.message || "Login failed")
+      setError(error.message || "Login failed");
     },
-  })
+  });
 
   const onFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    loginMutation.mutate({ username, password })
-  }
+    loginMutation.mutate({ username, password });
+  };
 
-  const onSignIn = () => {
-    setMode("signin")
-    setError(null)
-    setUsername("")
-    setPassword("")
-  }
+  const onlogin = () => {
+    setMode("login");
+    setError(null);
+    setUsername("");
+    setPassword("");
+  };
 
   const handleClick = () => {
-    if (mode === "signin") {
-      setMode("signup")
+    if (mode === "login") {
+      setMode("signup");
     } else {
-      onSignIn()
+      onlogin();
     }
-  }
+  };
 
   return (
     <>
@@ -84,7 +86,7 @@ function Login() {
           <CardHeader>
             <CardTitle>Pomodoro App</CardTitle>
             <CardDescription>
-              {mode === "signin"
+              {mode === "login"
                 ? "Log in to your account"
                 : "Create a new account"}
             </CardDescription>
@@ -124,12 +126,12 @@ function Login() {
 
               <div className="flex flex-col justify-center text-center mx-auto border-t ">
                 <p className="m-1">
-                  {mode === "signin"
+                  {mode === "login"
                     ? "New to our app?"
                     : "Already have an account?"}
                 </p>
                 <Button variant="ghost" onClick={handleClick}>
-                  {mode === "signin" ? "Create an account" : "Login"}
+                  {mode === "login" ? "Create an account" : "Login"}
                 </Button>
               </div>
             </form>
@@ -137,7 +139,7 @@ function Login() {
         </Card>
       </main>
     </>
-  )
+  );
 }
 
-export default Login
+export default Login;
