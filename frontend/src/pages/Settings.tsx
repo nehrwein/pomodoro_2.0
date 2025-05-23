@@ -1,17 +1,17 @@
-import { useEffect } from "react"
-import { useNavigate } from "react-router-dom"
-import { useUserStore } from "@/lib/useUserStore"
-import { Button } from "@/components/ui/button"
-import { Slider } from "@/components/ui/slider"
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useUserStore } from "@/lib/useUserStore";
+import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
 import {
   Card,
   CardHeader,
   CardTitle,
   CardDescription,
   CardContent,
-} from "@/components/ui/card"
-import { useMutation } from "@tanstack/react-query"
-import { updateUserSettings, deleteUser } from "@/lib/api"
+} from "@/components/ui/card";
+import { useMutation } from "@tanstack/react-query";
+import { updateUserSettings, deleteUser } from "@/lib/api";
 
 const Settings = () => {
   const {
@@ -24,51 +24,51 @@ const Settings = () => {
     setShortBreakMinutes,
     setLongBreakMinutes,
     setAccessToken,
-  } = useUserStore()
-  const navigate = useNavigate()
+  } = useUserStore();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!accessToken) {
-      navigate("/login")
+      navigate("/login");
     }
-  }, [accessToken, navigate])
+  }, [accessToken, navigate]);
 
   const mutation = useMutation({
     mutationFn: updateUserSettings,
     onSuccess: () => navigate("/"),
-  })
+  });
 
   const deleteMutation = useMutation({
     mutationFn: ({
       userId,
       accessToken,
     }: {
-      userId: string
-      accessToken?: string
+      userId: string;
+      accessToken?: string;
     }) => deleteUser({ userId, accessToken }),
     onSuccess: () => {
-      setAccessToken(null)
+      setAccessToken(null);
     },
-  })
+  });
 
   const handleSaveSettings = () => {
-    if (!userId) return
+    if (!userId) return;
     mutation.mutate({
       userId,
       workMinutes,
       shortBreakMinutes,
       longBreakMinutes,
       accessToken: accessToken ?? undefined,
-    })
-  }
+    });
+  };
 
   const handleDeleteAccount = () => {
-    if (!userId) return
-    deleteMutation.mutate({ userId, accessToken: accessToken ?? undefined })
-  }
+    if (!userId) return;
+    deleteMutation.mutate({ userId, accessToken: accessToken ?? undefined });
+  };
 
   return (
-    <div className="mx-auto w-4/5 max-w-[1100px] pt-12 text-center bg-[var(--beige)]">
+    <div className="mx-auto w-4/5 max-w-[1100px] pt-12 text-center">
       <Card className=" px-10">
         <CardHeader>
           <CardTitle className="text-xl md:text-3xl lg:text-3xl">
@@ -139,7 +139,7 @@ const Settings = () => {
         </CardContent>
       </Card>
     </div>
-  )
-}
+  );
+};
 
-export default Settings
+export default Settings;
