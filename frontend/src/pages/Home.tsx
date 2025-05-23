@@ -1,3 +1,4 @@
+import PomodoroTImer from "@/components/PomodoroTImer";
 import { Button } from "@/components/ui/button";
 import { useUserStore } from "@/lib/useUserStore";
 import { useEffect } from "react";
@@ -18,7 +19,10 @@ function Home() {
   }, [accessToken, navigate]);
   return (
     <>
-      <Button onClick={handleLogout}>Logout</Button>
+      <div className="flex flex-col">
+        <PomodoroTImer />
+        <Button onClick={handleLogout}>Logout</Button>
+      </div>
     </>
   );
 }
