@@ -1,4 +1,5 @@
 import PomodoroTImer from "@/components/PomodoroTImer";
+import Tasklist from "@/components/Tasklist";
 import { Button } from "@/components/ui/button";
 import { useUserStore } from "@/lib/useUserStore";
 import { useEffect } from "react";
@@ -21,6 +22,7 @@ function Home() {
     <>
       <div className="flex flex-col">
         <PomodoroTImer />
+        <Tasklist />
         <Button onClick={handleLogout}>Logout</Button>
       </div>
     </>

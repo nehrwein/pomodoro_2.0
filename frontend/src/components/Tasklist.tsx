@@ -1,44 +1,54 @@
-import clsx from "clsx"
+import clsx from "clsx";
+import { Input } from "./ui/input";
+import { useState } from "react";
+import { Button } from "./ui/button";
+import { Pencil, Save, Trash2 } from "lucide-react";
+import { Checkbox } from "./ui/checkbox";
+
+const allOpenTasks = [
+  {
+    _id: "1",
+    description: "Read a chapter of a book",
+    completed: false,
+    createdAt: new Date().toISOString(),
+    userId: "user1",
+  },
+  {
+    _id: "2",
+    description: "Write a daily journal entry",
+    completed: false,
+    createdAt: new Date().toISOString(),
+    userId: "user1",
+  },
+  {
+    _id: "3",
+    description: "Go for a 30-minute walk",
+    completed: false,
+    createdAt: new Date().toISOString(),
+    userId: "user1",
+  },
+  {
+    _id: "4",
+    description: "Review TypeScript notes",
+    completed: false,
+    createdAt: new Date().toISOString(),
+    userId: "user1",
+  },
+  {
+    _id: "5",
+    description: "Plan tomorrow’s tasks",
+    completed: false,
+    createdAt: new Date().toISOString(),
+    userId: "user1",
+  },
+];
 
 const Tasklist = () => {
-  const loading = false
-  const allOpenTasks = [
-    {
-      _id: "1",
-      description: "Read a chapter of a book",
-      completed: false,
-      createdAt: new Date().toISOString(),
-      userId: "user1",
-    },
-    {
-      _id: "2",
-      description: "Write a daily journal entry",
-      completed: false,
-      createdAt: new Date().toISOString(),
-      userId: "user1",
-    },
-    {
-      _id: "3",
-      description: "Go for a 30-minute walk",
-      completed: false,
-      createdAt: new Date().toISOString(),
-      userId: "user1",
-    },
-    {
-      _id: "4",
-      description: "Review TypeScript notes",
-      completed: false,
-      createdAt: new Date().toISOString(),
-      userId: "user1",
-    },
-    {
-      _id: "5",
-      description: "Plan tomorrow’s tasks",
-      completed: false,
-      createdAt: new Date().toISOString(),
-      userId: "user1",
-    },
-  ]
+  const loading = false;
+  const activatedTask = false;
+  const [updatedDescription, setUpdatedDescription] = useState("");
+  const [pickedId, setPickedId] = useState("");
+
   return (
     <>
       <div
@@ -58,81 +68,86 @@ const Tasklist = () => {
               >
                 {item._id === pickedId ? (
                   <>
-                    <EditInput
+                    <Input
                       type="text"
                       value={updatedDescription}
-                      onKeyPress={(e) => onPressEnter(e, item._id)}
+                      // onKeyPress={(e) => onPressEnter(e, item._id)}
                       onChange={(event) => {
-                        setUpdatedDescription(event.target.value)
+                        setUpdatedDescription(event.target.value);
                       }}
                       onDoubleClick={() => setPickedId("")}
                     />
-                    <SaveButton
+                    <Button
+                      variant="ghost"
                       type="submit"
                       disabled={!updatedDescription}
-                      onClick={() =>
-                        onUpdateTodo(
-                          item._id,
-                          accessToken,
-                          updatedDescription,
-                          userId
-                        )
-                      }
+                      // onClick={() =>
+                      //   onUpdateTodo(
+                      //     item._id,
+                      //     accessToken,
+                      //     updatedDescription,
+                      //     userId
+                      //   )
+                      // }
                     >
-                      <TaskIcon>{saveIcon}</TaskIcon>
-                    </SaveButton>
+                      <Save />
+                    </Button>
                   </>
                 ) : (
-                  <CheckContainer>
+                  <div className="flex items-center gap-2.5">
                     <Checkbox
-                      isChecked={item.completed}
-                      onChange={() =>
-                        onIsComplete(
-                          item._id,
-                          item.completed,
-                          item.completedAt,
-                          accessToken,
-                          userId
-                        )
-                      }
+                      checked={item.completed}
+                      id="task"
+                      // onChange={() =>
+                      //   onIsComplete(
+                      //     item._id,
+                      //     item.completed,
+                      //     item.completedAt,
+                      //     accessToken,
+                      //     userId
+                      //   )
+                      // }
                     />
-                    <TaskLabel
+                    <label htmlFor="task" className="text-sm font-medium">
+                      {item.description}
+                    </label>
+                    {/* <TaskLabel
                       taskColor={taskColor}
                       onClick={() => dispatch(timer.actions.setItems(item))}
                     >
                       {item.description}
-                    </TaskLabel>
-                  </CheckContainer>
+                    </TaskLabel> */}
+                  </div>
                 )}
-                <TaskSettings>
+                <div className="flex justify-evenly gap-5">
                   {/* Edit/Update feature: https://ibaslogic.com/how-to-edit-todos-items-in-react/ */}
                   {!activatedTask ? (
                     <div
                       onClick={() => setPickedId(item._id)}
                       onDoubleClick={() => setPickedId("")}
                     >
-                      <TaskIcon>{penIcon}</TaskIcon>
+                      <Pencil />
                     </div>
                   ) : (
                     <div>
-                      <TaskIcon>{penIcon}</TaskIcon>
+                      <Pencil />
                     </div>
                   )}
                   <div
-                    onClick={() =>
-                      dispatch(deleteTodo(accessToken, userId, item._id))
-                    }
+                  // onClick={() =>
+                  //   dispatch(deleteTodo(accessToken, userId, item._id))
+                  // }
                   >
-                    <TaskIcon>{trashCanIcon}</TaskIcon>
+                    <Trash2 />
                   </div>
-                </TaskSettings>
+                </div>
               </div>
             ))}
           </>
         )}
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Tasklist
+export default Tasklist;
