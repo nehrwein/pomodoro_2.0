@@ -1,17 +1,13 @@
+import AddTask from "@/components/Addtask";
 import PomodoroTImer from "@/components/PomodoroTImer";
 import Tasklist from "@/components/Tasklist";
-import { Button } from "@/components/ui/button";
 import { useUserStore } from "@/lib/useUserStore";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Home() {
   const navigate = useNavigate();
-  const { accessToken, setAccessToken } = useUserStore();
-
-  const handleLogout = () => {
-    setAccessToken(null);
-  };
+  const { accessToken } = useUserStore();
 
   useEffect(() => {
     if (!accessToken) {
@@ -23,7 +19,7 @@ function Home() {
       <div className="flex flex-col">
         <PomodoroTImer />
         <Tasklist />
-        <Button onClick={handleLogout}>Logout</Button>
+        <AddTask />
       </div>
     </>
   );
