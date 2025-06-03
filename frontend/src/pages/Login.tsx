@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { Loader2Icon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -36,32 +37,37 @@ function Login() {
     }
   }, [accessToken, navigate]);
 
-  const loginMutation = useMutation({
-    mutationFn: async ({
-      username,
-      password,
-    }: {
-      username: string;
-      password: string;
-    }) => {
-      const response = await api.post(`auth/${mode}`, { username, password });
-      return response.data;
-    },
-    onSuccess: (data) => {
-      setAccessToken(data.token);
-      setUserId(data.user.id);
-      setUsernameStore(data.user.username);
-      setError(null);
-    },
-    onError: (error: AxiosError) => {
-      setError(error.message || "Login failed");
-    },
-  });
+  const postLogin = async ({
+    username,
+    password,
+  }: {
+    username: string;
+    password: string;
+  }) => {
+    const response = await api.post(`auth/${mode}`, { username, password });
+    return response.data;
+  };
 
+  //TODO - specify data type
+  const useLogin = () =>
+    useMutation({
+      mutationFn: postLogin,
+      onSuccess: (data: any) => {
+        setAccessToken(data.token);
+        setUserId(data.user.id);
+        setUsernameStore(data.user.username);
+        setError(null);
+      },
+      onError: (error: AxiosError) => {
+        setError(error.message || "Login failed");
+      },
+    });
+
+  //TODO - add error handling
+  const { mutate, isPending, isError } = useLogin();
   const onFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    loginMutation.mutate({ username, password });
+    mutate({ username, password });
   };
 
   const onlogin = () => {
@@ -114,6 +120,7 @@ function Login() {
                   />
                 </div>
                 <Button size="lg" type="submit">
+                  {isPending ? <Loader2Icon className="animate-spin" /> : ""}
                   {mode === "signup" ? "Submit" : "Log in"}
                 </Button>
               </div>
