@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 interface UserState {
   userId: string | null;
@@ -17,19 +18,30 @@ interface UserState {
   setLongBreakMinutes: (minutes: number) => void;
 }
 
-export const useUserStore = create<UserState>((set) => ({
-  userId: null,
-  username: null,
-  accessToken: null,
-  error: null,
-  workMinutes: 25,
-  shortBreakMinutes: 5,
-  longBreakMinutes: 15,
-  setUserId: (userId) => set({ userId }),
-  setUsername: (username) => set({ username }),
-  setAccessToken: (accessToken) => set({ accessToken }),
-  setError: (error) => set({ error }),
-  setWorkMinutes: (minutes) => set({ workMinutes: minutes }),
-  setShortBreakMinutes: (minutes) => set({ shortBreakMinutes: minutes }),
-  setLongBreakMinutes: (minutes) => set({ longBreakMinutes: minutes }),
-}));
+export const useUserStore = create<UserState>()(
+  persist(
+    (set) => ({
+      userId: null,
+      username: null,
+      accessToken: null,
+      error: null,
+      workMinutes: 25,
+      shortBreakMinutes: 5,
+      longBreakMinutes: 15,
+      setUserId: (userId) => set({ userId }),
+      setUsername: (username) => set({ username }),
+      setAccessToken: (accessToken) => set({ accessToken }),
+      setError: (error) => set({ error }),
+      setWorkMinutes: (minutes) => set({ workMinutes: minutes }),
+      setShortBreakMinutes: (minutes) => set({ shortBreakMinutes: minutes }),
+      setLongBreakMinutes: (minutes) => set({ longBreakMinutes: minutes }),
+    }),
+    {
+      name: "user-store",
+      partialize: (state) => ({
+        accessToken: state.accessToken,
+        userId: state.userId,
+      }),
+    },
+  ),
+);
