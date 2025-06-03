@@ -1,8 +1,8 @@
-import { useUserStore } from "@/lib/useUserStore";
+import { LogOut, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useUserStore } from "@/lib/useUserStore";
 import { Button } from "./ui/button";
-import { LogOut, Menu, X } from "lucide-react";
 
 const Navigation = () => {
   const { accessToken, setAccessToken } = useUserStore();

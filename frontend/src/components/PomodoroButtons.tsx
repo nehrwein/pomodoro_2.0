@@ -1,16 +1,16 @@
-import { Button } from "./ui/button"
-import { Ban, CirclePause, Play, RotateCcw } from "lucide-react"
+import { Ban, CirclePause, Play, RotateCcw } from "lucide-react";
+import { Button } from "./ui/button";
 
 const PomodoroButtons = () => {
-  const work = false
+  const work = false;
   // const buttonBackgroundColor = work ? "darkred" : "darkblue"
-  const activatedButton = true
-  const isRunning = false
-  const iconColor = work ? "red" : "blue"
+  const activatedButton = true;
+  const isRunning = false;
+  const iconColor = work ? "red" : "blue";
 
-  const onClickReplay = () => {}
-  const onClickDelete = () => {}
-  const setIsRunning = () => {}
+  const onClickReplay = () => {};
+  const onClickDelete = () => {};
+  const setIsRunning = () => {};
 
   return (
     <>
@@ -64,7 +64,7 @@ const PomodoroButtons = () => {
         </Button>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default PomodoroButtons
+export default PomodoroButtons;

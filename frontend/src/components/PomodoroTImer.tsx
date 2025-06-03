@@ -1,13 +1,13 @@
-import { useState } from "react"
-import PomodoroButtons from "./PomodoroButtons"
+import { useState } from "react";
+import PomodoroButtons from "./PomodoroButtons";
 
 const PomodoroTImer = () => {
-  const [work, setWork] = useState(true)
-  const timerMinutes = 10
-  const timerSeconds = 35
-  const description = "Lorem Ipsum"
-  const percentage = 0
-  const animationColor = "green"
+  const [work, setWork] = useState(true);
+  const timerMinutes = 10;
+  const timerSeconds = 35;
+  const description = "Lorem Ipsum";
+  const percentage = 0;
+  const animationColor = "green";
 
   return (
     <>
@@ -44,7 +44,7 @@ const PomodoroTImer = () => {
       /> */}
       </div>
     </>
-  )
-}
+  );
+};
 
-export default PomodoroTImer
+export default PomodoroTImer;

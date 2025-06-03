@@ -1,17 +1,17 @@
+import { useMutation } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useUserStore } from "@/lib/useUserStore";
 import { Button } from "@/components/ui/button";
-import { Slider } from "@/components/ui/slider";
 import {
   Card,
+  CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardContent,
 } from "@/components/ui/card";
-import { useMutation } from "@tanstack/react-query";
-import { updateUserSettings, deleteUser } from "@/lib/api";
+import { Slider } from "@/components/ui/slider";
+import { deleteUser, updateUserSettings } from "@/lib/api";
+import { useUserStore } from "@/lib/useUserStore";
 
 const Settings = () => {
   const {

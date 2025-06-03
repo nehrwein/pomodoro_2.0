@@ -8,7 +8,7 @@ function NotFound() {
         </h3>
       </div>
     </main>
-  )
+  );
 }
 
-export default NotFound
+export default NotFound;

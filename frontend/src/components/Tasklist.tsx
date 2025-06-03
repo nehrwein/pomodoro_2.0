@@ -1,9 +1,9 @@
 import clsx from "clsx";
-import { Input } from "./ui/input";
+import { Pencil, Save, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "./ui/button";
-import { Pencil, Save, Trash2 } from "lucide-react";
 import { Checkbox } from "./ui/checkbox";
+import { Input } from "./ui/input";
 
 const allOpenTasks = [
   {
@@ -55,7 +55,7 @@ const Tasklist = () => {
         className={clsx(
           "flex flex-col items-center py-8 w-11/12 md:max-w-[550px] lg:max-w-[1000px] overflow-y-auto",
           "lg:grid lg:justify-items-center lg:content-start lg:min-h-[30vh]",
-          loading ? "lg:grid-cols-1" : "lg:grid-cols-2"
+          loading ? "lg:grid-cols-1" : "lg:grid-cols-2",
         )}
       >
         {/* {loading && <LoadingIndicator />} */}

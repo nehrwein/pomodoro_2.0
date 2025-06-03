@@ -1,10 +1,10 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./pages/Login";
-import Home from "./pages/Home";
-import NotFound from "./pages/NotFound";
-import Settings from "./pages/Settings";
-import Report from "./pages/Report";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Navigation from "./components/Navigation";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import NotFound from "./pages/NotFound";
+import Report from "./pages/Report";
+import Settings from "./pages/Settings";
 
 function App() {
   return (
