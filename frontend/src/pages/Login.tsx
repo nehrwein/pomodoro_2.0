@@ -15,8 +15,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import api from "@/lib/axios";
 import { useUserStore } from "@/lib/useUserStore";
+import type { AuthResponse } from "@/types/apiSchemas";
 
-function Login() {
+interface LoginArgs {
+  username: string;
+  password: string;
+}
+
+const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [mode, setMode] = useState("login");
@@ -37,22 +43,15 @@ function Login() {
     }
   }, [accessToken, navigate]);
 
-  const postLogin = async ({
-    username,
-    password,
-  }: {
-    username: string;
-    password: string;
-  }) => {
+  const postLogin = async ({ username, password }: LoginArgs) => {
     const response = await api.post(`auth/${mode}`, { username, password });
     return response.data;
   };
 
-  //TODO - specify data type
   const useLogin = () =>
     useMutation({
       mutationFn: postLogin,
-      onSuccess: (data: any) => {
+      onSuccess: (data: AuthResponse) => {
         setAccessToken(data.token);
         setUserId(data.user.id);
         setUsernameStore(data.user.username);
@@ -147,6 +146,6 @@ function Login() {
       </main>
     </>
   );
-}
+};
 
 export default Login;
