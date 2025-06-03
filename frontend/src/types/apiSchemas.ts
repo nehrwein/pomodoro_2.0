@@ -29,4 +29,8 @@ export const SettingsSchema = z.object({
 export type AuthRequest = z.infer<typeof AuthRequestSchema>;
 export type AuthResponse = z.infer<typeof AuthResponseSchema>;
 export type Task = z.infer<typeof TaskSchema>;
+export type TasksResponse = {
+  response: Task[];
+  success: boolean;
+};
 export type Settings = z.infer<typeof SettingsSchema>;
