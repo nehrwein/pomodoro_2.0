@@ -17,4 +17,18 @@ api.interceptors.request.use((config) => {
   config.headers["Content-Type"] = "application/json";
   return config;
 });
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (
+      error.response &&
+      (error.response.status === 401 || error.response.status === 403)
+    ) {
+      useUserStore.getState().setAccessToken(null);
+      useUserStore.getState().setUserId(null);
+    }
+    return Promise.reject(error);
+  },
+);
 export default api;
