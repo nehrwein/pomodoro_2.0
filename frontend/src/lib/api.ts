@@ -1,29 +1,41 @@
+import { z } from "zod";
 import axios from "@/lib/axios";
+import {
+  AuthResponseSchema,
+  SettingsSchema,
+  TaskSchema,
+  // ggf. weitere Schemas importieren
+} from "@/types/apiSchemas";
 
-// AUTH
-export async function signup({
+// Hilfsschemas für Response-Objekte
+const TasksResponseSchema = z.object({
+  response: z.array(TaskSchema),
+  success: z.boolean(),
+});
+
+const DeleteResponseSchema = z.object({
+  response: z.any(),
+  success: z.boolean(),
+});
+
+// AUTH (Login & Signup kombiniert)
+export async function auth({
   username,
   password,
+  mode,
 }: {
   username: string;
   password: string;
+  mode: "login" | "signup";
 }) {
-  return axios.post("/api/auth/signup", { username, password });
-}
-
-export async function signin({
-  username,
-  password,
-}: {
-  username: string;
-  password: string;
-}) {
-  return axios.post("/auth/signin", { username, password });
+  const response = await axios.post(`/auth/${mode}`, { username, password });
+  return AuthResponseSchema.parse(response.data);
 }
 
 // TASKS
 export async function getTasks(userId: string) {
-  return axios.get(`/api/tasks/${userId}`);
+  const response = await axios.get(`/tasks/${userId}`);
+  return TasksResponseSchema.parse(response.data);
 }
 
 export async function createTask({
@@ -33,15 +45,18 @@ export async function createTask({
   description: string;
   user: string;
 }) {
-  return axios.post("/api/tasks", { description, user });
+  const response = await axios.post("/tasks", { description, user });
+  return TaskSchema.parse(response.data.response); // response enthält das neue Task-Objekt
 }
 
 export async function completeTask(taskId: string) {
-  return axios.patch(`/api/tasks/${taskId}/complete`);
+  const response = await axios.patch(`/tasks/${taskId}/complete`);
+  return TaskSchema.parse(response.data.response); // response enthält das aktualisierte Task-Objekt
 }
 
 export async function deleteTask(taskId: string) {
-  return axios.delete(`/api/tasks/${taskId}`);
+  const response = await axios.delete(`/tasks/${taskId}`);
+  return DeleteResponseSchema.parse(response.data);
 }
 
 // USER SETTINGS
@@ -58,11 +73,12 @@ export async function updateUserSettings({
   longBreakMinutes: number;
   accessToken?: string;
 }) {
-  return axios.patch(
-    `/api/user/${userId}/settings`,
+  const response = await axios.patch(
+    `/user/${userId}/settings`,
     { workMinutes, shortBreakMinutes, longBreakMinutes },
     accessToken ? { headers: { Authorization: `Bearer ${accessToken}` } } : {},
   );
+  return SettingsSchema.parse(response.data.response); // response enthält die Settings
 }
 
 export async function deleteUser({
@@ -72,8 +88,9 @@ export async function deleteUser({
   userId: string;
   accessToken?: string;
 }) {
-  return axios.delete(
-    `/api/user/${userId}`,
+  const response = await axios.delete(
+    `/user/${userId}`,
     accessToken ? { headers: { Authorization: `Bearer ${accessToken}` } } : {},
   );
+  return DeleteResponseSchema.parse(response.data);
 }

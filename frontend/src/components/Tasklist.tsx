@@ -2,9 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
 import { Pencil, Save, Trash2 } from "lucide-react";
 import { useState } from "react";
-import api from "@/lib/axios";
+import { getTasks } from "@/lib/api";
 import { useUserStore } from "@/lib/useUserStore";
-import type { TasksResponse } from "@/types/apiSchemas";
 import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
 import { Input } from "./ui/input";
@@ -15,15 +14,11 @@ const Tasklist = () => {
   const [updatedDescription, setUpdatedDescription] = useState("");
   const [pickedId, setPickedId] = useState("");
 
-  const getTasks = async () => {
-    const response = await api.get(`tasks/${userId}`);
-    return response.data as TasksResponse;
-  };
-
   //TODO - error handling and loading state
   const { isPending, isError, data } = useQuery({
     queryKey: ["allTasks"],
-    queryFn: getTasks,
+    queryFn: () => getTasks(userId!),
+    enabled: !!userId,
   });
 
   return (

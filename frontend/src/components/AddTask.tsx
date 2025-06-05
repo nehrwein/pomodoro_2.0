@@ -1,15 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
 import { useState } from "react";
-import api from "@/lib/axios";
+import { createTask } from "@/lib/api";
 import { useUserStore } from "@/lib/useUserStore";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-
-interface postTaskArgs {
-  description: string;
-  userId: string;
-}
 
 const AddTask = () => {
   const [task, setTask] = useState("");
@@ -17,20 +12,12 @@ const AddTask = () => {
   const userId = useUserStore().userId;
   const queryClient = useQueryClient();
 
-  const postTask = async ({ description, userId }: postTaskArgs) => {
-    const response = await api.post("/tasks", {
-      description,
-      user: userId,
-    });
-    return response.data;
-  };
-
   const {
     mutate: addTask,
     isPending,
     isError,
   } = useMutation({
-    mutationFn: postTask,
+    mutationFn: createTask,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["allTasks"] });
       setTask("");
@@ -39,7 +26,7 @@ const AddTask = () => {
 
   const handleAddTask = () => {
     if (userId) {
-      addTask({ description: task, userId });
+      addTask({ description: task, user: userId });
     }
   };
 

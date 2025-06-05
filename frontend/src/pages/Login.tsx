@@ -13,19 +13,13 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import api from "@/lib/axios";
+import { auth } from "@/lib/api";
 import { useUserStore } from "@/lib/useUserStore";
-import type { AuthResponse } from "@/types/apiSchemas";
-
-interface LoginArgs {
-  username: string;
-  password: string;
-}
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [mode, setMode] = useState("login");
+  const [mode, setMode] = useState<"login" | "signup">("login");
   const {
     accessToken,
     error,
@@ -43,15 +37,10 @@ const Login = () => {
     }
   }, [accessToken, navigate]);
 
-  const postLogin = async ({ username, password }: LoginArgs) => {
-    const response = await api.post(`auth/${mode}`, { username, password });
-    return response.data;
-  };
-
   const useLogin = () =>
     useMutation({
-      mutationFn: postLogin,
-      onSuccess: (data: AuthResponse) => {
+      mutationFn: auth,
+      onSuccess: (data) => {
         setAccessToken(data.token);
         setUserId(data.user.id);
         setUsernameStore(data.user.username);
@@ -66,7 +55,7 @@ const Login = () => {
   const { mutate, isPending, isError } = useLogin();
   const onFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    mutate({ username, password });
+    mutate({ username, password, mode });
   };
 
   const onlogin = () => {
