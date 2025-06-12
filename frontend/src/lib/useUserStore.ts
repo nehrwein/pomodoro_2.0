@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 interface UserState {
   userId: string | null;
@@ -42,6 +42,7 @@ export const useUserStore = create<UserState>()(
         accessToken: state.accessToken,
         userId: state.userId,
       }),
+      storage: createJSONStorage(() => sessionStorage),
     },
   ),
 );
