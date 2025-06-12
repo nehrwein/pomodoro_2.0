@@ -1,8 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
 import { Pencil, Save, Trash2 } from "lucide-react";
 import { useState } from "react";
-import { getTasks } from "@/lib/api";
+import { deleteTask, getTasks } from "@/lib/api";
 import { useUserStore } from "@/lib/useUserStore";
 import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
@@ -13,6 +13,7 @@ const Tasklist = () => {
   const activatedTask = false;
   const [updatedDescription, setUpdatedDescription] = useState("");
   const [pickedId, setPickedId] = useState("");
+  const queryClient = useQueryClient();
 
   //TODO - error handling and loading state
   const { isPending, isError, data } = useQuery({
@@ -20,6 +21,21 @@ const Tasklist = () => {
     queryFn: () => getTasks(userId!),
     enabled: !!userId,
   });
+
+  const {
+    mutate: deleteTodo,
+    isPending: isPendingDelete,
+    isError: isErrorDelete,
+  } = useMutation({
+    mutationFn: deleteTask,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["allTasks"] });
+    },
+  });
+
+  const handleTaskDelete = (id: string) => {
+    deleteTodo(id);
+  };
 
   return (
     <>
@@ -35,7 +51,7 @@ const Tasklist = () => {
           <>
             {data.response.map((item) => (
               <div
-                className="w-4/5 flex items-center justify-between pb-1.5 lg:py-1.5 lg:px-5"
+                className="w-4/5 flex items-center justify-between pb-1.5 lg:py-1.5 lg:px-5 hover:bg-red-100"
                 key={item.id}
               >
                 {item.id === pickedId ? (
@@ -92,26 +108,24 @@ const Tasklist = () => {
                   </div>
                 )}
                 <div className="flex justify-evenly gap-5">
-                  {/* Edit/Update feature: https://ibaslogic.com/how-to-edit-todos-items-in-react/ */}
                   {!activatedTask ? (
-                    <div
+                    <Pencil
+                      className="cursor-pointer"
                       onClick={() => setPickedId(item.id)}
                       onDoubleClick={() => setPickedId("")}
-                    >
-                      <Pencil />
-                    </div>
+                    />
                   ) : (
-                    <div>
-                      <Pencil />
-                    </div>
+                    <Pencil />
                   )}
-                  <div
-                  // onClick={() =>
-                  //   dispatch(deleteTodo(accessToken, userId, item.id))
-                  // }
-                  >
-                    <Trash2 />
-                  </div>
+                  <Trash2
+                    className={
+                      `cursor-pointer transition-transform duration-200 active:scale-90 ` +
+                      (isPendingDelete
+                        ? " animate-pulse opacity-50 pointer-events-none"
+                        : "")
+                    }
+                    onClick={() => handleTaskDelete(item.id)}
+                  />
                 </div>
               </div>
             ))}
