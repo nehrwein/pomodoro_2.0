@@ -46,12 +46,19 @@ export async function createTask({
   user: string;
 }) {
   const response = await axios.post("/tasks", { description, user });
-  return TaskSchema.parse(response.data.response); // response enthält das neue Task-Objekt
+  return TaskSchema.parse(response.data.response);
 }
 
-export async function completeTask(taskId: string) {
-  const response = await axios.patch(`/tasks/${taskId}/complete`);
-  return TaskSchema.parse(response.data.response); // response enthält das aktualisierte Task-Objekt
+export async function completeTask(
+  taskId: string,
+  completed: boolean,
+  completedAt?: string,
+) {
+  const response = await axios.patch(`/tasks/${taskId}/complete`, {
+    completed,
+    completedAt,
+  });
+  return TaskSchema.parse(response.data.response);
 }
 
 export async function deleteTask(taskId: string) {

@@ -2,8 +2,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
 import { Pencil, Save, Trash2 } from "lucide-react";
 import { useState } from "react";
-import { deleteTask, getTasks } from "@/lib/api";
+import { completeTask, deleteTask, getTasks } from "@/lib/api";
 import { useUserStore } from "@/lib/useUserStore";
+import type { Task } from "@/types/apiSchemas";
 import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
 import { Input } from "./ui/input";
@@ -32,6 +33,35 @@ const Tasklist = () => {
       queryClient.invalidateQueries({ queryKey: ["allTasks"] });
     },
   });
+
+  const {
+    mutate: completeTodo,
+    isPending: isPendingComplete,
+    isError: isErrorComplete,
+  } = useMutation({
+    mutationFn: ({
+      taskId,
+      completed,
+      completedAt,
+    }: {
+      taskId: string;
+      completed: boolean;
+      completedAt?: string;
+    }) => completeTask(taskId, completed, completedAt),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["allTasks"] });
+    },
+  });
+
+  const handleTaskComplete = (item: Task) => {
+    const now = new Date().toISOString();
+    // Toggle: Wenn bereits completed, dann auf uncompleted setzen (completedAt entfernen)
+    completeTodo({
+      taskId: item.id,
+      completed: !item.completed,
+      completedAt: !item.completed ? now : undefined,
+    });
+  };
 
   const handleTaskDelete = (id: string) => {
     deleteTodo(id);
@@ -86,15 +116,7 @@ const Tasklist = () => {
                     <Checkbox
                       checked={item.completed}
                       id="task"
-                      // onChange={() =>
-                      //   onIsComplete(
-                      //     item.id,
-                      //     item.completed,
-                      //     item.completedAt,
-                      //     accessToken,
-                      //     userId
-                      //   )
-                      // }
+                      onCheckedChange={() => handleTaskComplete(item)}
                     />
                     <label htmlFor="task" className="text-sm font-medium">
                       {item.description}
