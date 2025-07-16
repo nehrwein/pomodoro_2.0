@@ -8,7 +8,6 @@ import { Input } from "./ui/input";
 
 const AddTask = () => {
   const [task, setTask] = useState("");
-  const taskColor = "blue";
   const userId = useUserStore().userId;
   const queryClient = useQueryClient();
 
@@ -31,10 +30,7 @@ const AddTask = () => {
   };
 
   return (
-    <div
-      className={`w-full flex items-center justify-center border-t-2 gap-2.5 py-5`}
-      style={{ borderTopColor: taskColor }}
-    >
+    <div className={`w-full flex items-center justify-center gap-2.5 py-5`}>
       <div className="flex w-2xl gap-2">
         <Input
           id="task"

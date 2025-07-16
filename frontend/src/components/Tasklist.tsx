@@ -52,7 +52,11 @@ const Tasklist = () => {
     },
   });
 
-  const { mutate: updateTodo } = useMutation({
+  const {
+    mutate: updateTodo,
+    isPending: isPendingUpdate,
+    isError: isErrorUpdate,
+  } = useMutation({
     mutationFn: ({
       taskId,
       description,
@@ -98,7 +102,7 @@ const Tasklist = () => {
   return (
     <>
       <div
-        className="flex flex-col items-center py-8 w-11/12 md:max-w-[550px] lg:max-w-[1000px] overflow-y-auto
+        className="flex m-auto flex-col items-center py-8  md:max-w-[550px] lg:max-w-[1000px] overflow-y-auto
         lg:grid lg:justify-items-center lg:content-start lg:min-h-[30vh]"
       >
         {/* {loading && <LoadingIndicator />} */}
@@ -106,7 +110,7 @@ const Tasklist = () => {
           <>
             {data.response.map((item) => (
               <div
-                className="w-4/5 flex items-center justify-between pb-1.5 lg:py-1.5 lg:px-5 hover:bg-red-100"
+                className="w-2xl flex items-center justify-between pb-1.5 lg:py-1.5  hover:bg-red-100"
                 key={item.id}
               >
                 {item.id === pickedId ? (
@@ -114,7 +118,11 @@ const Tasklist = () => {
                     <Input
                       type="text"
                       value={updatedDescription}
-                      // onKeyPress={(e) => onPressEnter(e, item.id)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          handleUpdateTask(item.id, updatedDescription);
+                        }
+                      }}
                       onChange={(event) => {
                         setUpdatedDescription(event.target.value);
                       }}
