@@ -66,6 +66,13 @@ export async function deleteTask(taskId: string) {
   return DeleteResponseSchema.parse(response.data);
 }
 
+export async function updateTask(taskId: string, description: string) {
+  const response = await axios.patch(`/tasks/${taskId}/update`, {
+    description,
+  });
+  return TaskSchema.parse(response.data.response);
+}
+
 // USER SETTINGS
 export async function updateUserSettings({
   userId,

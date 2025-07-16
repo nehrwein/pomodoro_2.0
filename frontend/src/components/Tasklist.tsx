@@ -1,11 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import clsx from "clsx";
-import { Pencil, Save, Trash2 } from "lucide-react";
+import { Pencil, Save, Trash2, X } from "lucide-react";
 import { useState } from "react";
-import { completeTask, deleteTask, getTasks } from "@/lib/api";
+import { completeTask, deleteTask, getTasks, updateTask } from "@/lib/api";
 import { useUserStore } from "@/lib/useUserStore";
 import type { Task } from "@/types/apiSchemas";
-import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
 import { Input } from "./ui/input";
 
@@ -13,6 +11,7 @@ const Tasklist = () => {
   const userId = useUserStore().userId;
   const activatedTask = false;
   const [updatedDescription, setUpdatedDescription] = useState("");
+  const [isUpdating, setIsUpdating] = useState(false);
   const [pickedId, setPickedId] = useState("");
   const queryClient = useQueryClient();
 
@@ -53,6 +52,19 @@ const Tasklist = () => {
     },
   });
 
+  const { mutate: updateTodo } = useMutation({
+    mutationFn: ({
+      taskId,
+      description,
+    }: {
+      taskId: string;
+      description: string;
+    }) => updateTask(taskId, description),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["allTasks"] });
+    },
+  });
+
   const handleTaskComplete = (item: Task) => {
     const now = new Date().toISOString();
     // Toggle: Wenn bereits completed, dann auf uncompleted setzen (completedAt entfernen)
@@ -67,14 +79,27 @@ const Tasklist = () => {
     deleteTodo(id);
   };
 
+  const handleUpdateTask = (taskId: string, description: string) => {
+    updateTodo({ taskId, description });
+    setPickedId("");
+    setIsUpdating(false);
+  };
+
+  const onIsUpdating = (id: string) => {
+    setPickedId(id);
+    setIsUpdating(true);
+  };
+
+  const onStopUpdating = () => {
+    setPickedId("");
+    setIsUpdating(false);
+  };
+
   return (
     <>
       <div
-        className={clsx(
-          "flex flex-col items-center py-8 w-11/12 md:max-w-[550px] lg:max-w-[1000px] overflow-y-auto",
-          "lg:grid lg:justify-items-center lg:content-start lg:min-h-[30vh]",
-          isPending ? "lg:grid-cols-1" : "lg:grid-cols-2",
-        )}
+        className="flex flex-col items-center py-8 w-11/12 md:max-w-[550px] lg:max-w-[1000px] overflow-y-auto
+        lg:grid lg:justify-items-center lg:content-start lg:min-h-[30vh]"
       >
         {/* {loading && <LoadingIndicator />} */}
         {data && !isPending && (
@@ -85,7 +110,7 @@ const Tasklist = () => {
                 key={item.id}
               >
                 {item.id === pickedId ? (
-                  <>
+                  <div className="flex gap-2 items-center ">
                     <Input
                       type="text"
                       value={updatedDescription}
@@ -95,22 +120,13 @@ const Tasklist = () => {
                       }}
                       onDoubleClick={() => setPickedId("")}
                     />
-                    <Button
-                      variant="ghost"
-                      type="submit"
-                      disabled={!updatedDescription}
-                      // onClick={() =>
-                      //   onUpdateTodo(
-                      //     item.id,
-                      //     accessToken,
-                      //     updatedDescription,
-                      //     userId
-                      //   )
-                      // }
-                    >
-                      <Save />
-                    </Button>
-                  </>
+                    <Save
+                      className="cursor-pointer"
+                      onClick={() =>
+                        handleUpdateTask(item.id, updatedDescription)
+                      }
+                    />
+                  </div>
                 ) : (
                   <div className="flex items-center gap-2.5">
                     <Checkbox
@@ -130,15 +146,19 @@ const Tasklist = () => {
                   </div>
                 )}
                 <div className="flex justify-evenly gap-5">
-                  {!activatedTask ? (
+                  {!isUpdating ? (
                     <Pencil
-                      className="cursor-pointer"
-                      onClick={() => setPickedId(item.id)}
-                      onDoubleClick={() => setPickedId("")}
+                      className={`cursor-pointer ${activatedTask ? "opacity-50 pointer-events-none" : ""}`}
+                      aria-disabled={activatedTask}
+                      onClick={() => onIsUpdating(item.id)}
+                      onDoubleClick={
+                        activatedTask ? () => setPickedId("") : undefined
+                      }
                     />
                   ) : (
-                    <Pencil />
+                    <X className="cursor-pointer" onClick={onStopUpdating} />
                   )}
+
                   <Trash2
                     className={
                       `cursor-pointer transition-transform duration-200 active:scale-90 ` +
