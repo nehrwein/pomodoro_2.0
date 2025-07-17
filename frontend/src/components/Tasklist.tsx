@@ -1,14 +1,15 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Pencil, Save, Trash2, X } from "lucide-react";
+import { Icon, Pencil, Save, Trash2, X } from "lucide-react";
 import { useState } from "react";
 import { completeTask, deleteTask, getTasks, updateTask } from "@/lib/api";
 import { useUserStore } from "@/lib/useUserStore";
 import type { Task } from "@/types/apiSchemas";
+import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
 import { Input } from "./ui/input";
 
 const Tasklist = () => {
-  const userId = useUserStore().userId;
+  const { userId, setActiveTask } = useUserStore();
   const activatedTask = false;
   const [updatedDescription, setUpdatedDescription] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
@@ -142,7 +143,10 @@ const Tasklist = () => {
                       id="task"
                       onCheckedChange={() => handleTaskComplete(item)}
                     />
-                    <label htmlFor="task" className="text-sm font-medium">
+                    <label
+                      htmlFor="task"
+                      className="text-sm font-medium cursor-pointer"
+                    >
                       {item.description}
                     </label>
                     {/* <TaskLabel
@@ -153,29 +157,38 @@ const Tasklist = () => {
                     </TaskLabel> */}
                   </div>
                 )}
-                <div className="flex justify-evenly gap-5">
+                <div className="flex items-center justify-evenly gap-5">
                   {!isUpdating ? (
-                    <Pencil
-                      className={`cursor-pointer ${activatedTask ? "opacity-50 pointer-events-none" : ""}`}
-                      aria-disabled={activatedTask}
-                      onClick={() => onIsUpdating(item.id)}
-                      onDoubleClick={
-                        activatedTask ? () => setPickedId("") : undefined
-                      }
-                    />
+                    <>
+                      <Button
+                        variant="ghost"
+                        onClick={() => setActiveTask(item.description)}
+                      >
+                        <img
+                          src="/favicon-32x32.png"
+                          alt="red tomatoe"
+                          className="h-6"
+                        />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        onClick={() => onIsUpdating(item.id)}
+                        disabled={activatedTask}
+                      >
+                        <Pencil />
+                      </Button>
+                    </>
                   ) : (
-                    <X className="cursor-pointer" onClick={onStopUpdating} />
+                    <Button variant="ghost" onClick={onStopUpdating}>
+                      <X />
+                    </Button>
                   )}
-
-                  <Trash2
-                    className={
-                      `cursor-pointer transition-transform duration-200 active:scale-90 ` +
-                      (isPendingDelete
-                        ? " animate-pulse opacity-50 pointer-events-none"
-                        : "")
-                    }
+                  <Button
+                    variant="ghost"
                     onClick={() => handleTaskDelete(item.id)}
-                  />
+                  >
+                    <Trash2 />
+                  </Button>
                 </div>
               </div>
             ))}
