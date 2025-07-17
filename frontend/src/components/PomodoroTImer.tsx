@@ -1,11 +1,12 @@
 import { useState } from "react";
+import { useUserStore } from "@/lib/useUserStore";
 import PomodoroButtons from "./PomodoroButtons";
 
 const PomodoroTImer = () => {
   const [work, setWork] = useState(true);
   const timerMinutes = 10;
   const timerSeconds = 35;
-  const description = "Lorem Ipsum";
+  const description = useUserStore().activeTask;
   const percentage = 0;
   const animationColor = "green";
 
